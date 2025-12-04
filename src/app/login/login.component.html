@@ -1,0 +1,55 @@
+<div class="login-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Online Voting System</mat-card-title>
+      <mat-card-subtitle>Login with OTP</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="generateOtp()">
+        
+        <!-- Email Field -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Email Address</mat-label>
+          <input 
+            matInput 
+            type="email" 
+            formControlName="email"
+            placeholder="Enter your email"
+            [disabled]="loading">
+          <mat-error *if="email?.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *if="email?.hasError('email')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Success Message -->
+        <div *if="successMessage" class="success-message">
+          <mat-icon>check_circle</mat-icon>
+          <span>{{ successMessage }}</span>
+        </div>
+
+        <!-- Error Message -->
+        <div *if="errorMessage" class="error-message">
+          <mat-icon>error</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <!-- Generate OTP Button -->
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit"
+          class="full-width"
+          [disabled]="loading">
+          <mat-icon *if="!loading">mail_outline</mat-icon>
+          <mat-spinner diameter="20" *if="loading"></mat-spinner>
+          {{ loading ? 'Sending OTP...' : 'Generate OTP' }}
+        </button>
+       <a matButton href="https://www.google.com/" target="_blank">Create New User</a>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
