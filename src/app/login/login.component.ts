@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { IfDirective } from '../shared/if.directive'; // <-- added
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'login',
@@ -24,6 +25,7 @@ import { IfDirective } from '../shared/if.directive'; // <-- added
     MatSnackBarModule,
     IfDirective
   ],
+  standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -35,7 +37,8 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private loginService: LoginService
   ) {
     this.loginForm = this.formBuilder.group({});
   }
@@ -51,18 +54,24 @@ export class LoginComponent implements OnInit {
   }
 
   generateOtp(): void {
-    debugger;
     this.submitted = true;
     this.errorMessage = '';
     this.successMessage = '';
-
+    this.loading = true;
     if (this.loginForm.invalid) {
       return;
     }else {
-      this.successMessage = 'OTP has been sent to your email.';
+      this.loginService.generateOtp(this.email?.value).subscribe(
+        (response) => {
+          this.successMessage = 'OTP has been sent to your email.';
+          this.loading = false;
+        },
+        (error) => {
+          this.errorMessage = 'Failed to send OTP. Please try again.';
+          this.loading = false;
+        }
+      );
     }
 
-    this.loading = true;
-    
   }
 }
