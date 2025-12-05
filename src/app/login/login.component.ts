@@ -64,10 +64,14 @@ export class LoginComponent implements OnInit {
       this.loginService.generateOtp(this.email?.value).subscribe(
         (response) => {
           this.successMessage = 'OTP has been sent to your email.';
+       
           this.loading = false;
         },
         (error) => {
           this.errorMessage = 'Failed to send OTP. Please try again.';
+             if(error.error && error.error.errors && error.error.errors.length > 0) {
+            this.errorMessage = error.error.errors[0];
+          }
           this.loading = false;
         }
       );
