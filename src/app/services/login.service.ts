@@ -16,5 +16,9 @@ export class LoginService {
         return this.httpClient.post<any>(URLConstants.BASE_URL + URLConstants.GENERATE_OTP, { userId:userId });
     }
 
+    login(userId: string, otp: string) : Observable<any> {
+        
+        return this.httpClient.post<any>(URLConstants.BASE_URL + URLConstants.LOGIN, { userId:userId, otp: otp });
+    }   
 
 }   
