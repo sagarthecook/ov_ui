@@ -10,7 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { UserService } from '../services/user.service';
 import { APIResponse } from '../models/ApiResponse';
-import { Country } from '../models/Contry';
+import { DropdownModel } from '../models/dropdown.model';
 
 @Component({
   selector: 'userregistration',
@@ -38,40 +38,10 @@ export class UserRegistration implements OnInit {
     this.registrationForm = this.formBuilder.group({});
   }
   // country/state/city data
-  countries: Country[] = [];
+  countries: DropdownModel[] = [];
 
-  statesMap: Record<string, { code: string; name: string }[]> = {
-    IN: [
-      { code: 'MH', name: 'Maharashtra' },
-      { code: 'KA', name: 'Karnataka' }
-    ],
-    US: [
-      { code: 'CA', name: 'California' },
-      { code: 'NY', name: 'New York' }
-    ]
-  };
-
-  citiesMap: Record<string, { code: string; name: string }[]> = {
-    MH: [
-      { code: 'MUM', name: 'Mumbai' },
-      { code: 'PUN', name: 'Pune' }
-    ],
-    KA: [
-      { code: 'BLR', name: 'Bengaluru' },
-      { code: 'MYS', name: 'Mysore' }
-    ],
-    CA: [
-      { code: 'LA', name: 'Los Angeles' },
-      { code: 'SF', name: 'San Francisco' }
-    ],
-    NY: [
-      { code: 'NYC', name: 'New York City' },
-      { code: 'ALB', name: 'Albany' }
-    ]
-  };
-
-  filteredStates: { code: string; name: string }[] = [];
-  filteredCities: { code: string; name: string }[] = [];
+  states: DropdownModel[] = [];
+  cities: DropdownModel[] = [];
 
   // Validator: rejects values that start or end with whitespace
   private noLeadingTrailingSpaces: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -107,14 +77,14 @@ export class UserRegistration implements OnInit {
     });
 
     // initialize filtered lists if needed
-    this.filteredStates = [];
-    this.filteredCities = [];
+    this.states = [];
+    this.cities = [];
      this.loadCoutrnies();
   }
 
   loadCoutrnies(): void {
     this.userService.getCountries().subscribe(
-      (response: APIResponse<Country[]>) => {
+      (response: APIResponse<DropdownModel[]>) => {
         if (response && response.data) {
           this.countries = response.data;
         }
@@ -132,16 +102,21 @@ export class UserRegistration implements OnInit {
   }
 
   onCountryChange(countryCode: string) {
-    this.filteredStates = this.statesMap[countryCode] || [];
-    // reset state & city when country changes
-    this.address.patchValue({ state: '', city: '' });
-    this.filteredCities = [];
+    // call state api to get states for selected country
+    this.userService.getStates(countryCode).subscribe(
+      (response: APIResponse<DropdownModel[]>) => {
+        if (response && response.data) {  
+          this.states = response.data;    
+        }
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load states.';
+      }
+    );
   }
 
   onStateChange(stateCode: string) {
-    this.filteredCities = this.citiesMap[stateCode] || [];
-    // reset city when state changes
-    this.address.patchValue({ city: '' });
+    // call city api to get cities for selected state
   }
 
   onSubmit(): void {
@@ -167,8 +142,8 @@ export class UserRegistration implements OnInit {
     this.registrationForm.reset();
     this.errorMessage = '';
     this.successMessage = '';
-    this.filteredStates = [];
-    this.filteredCities = [];
+    this.states = [];
+    this.cities = [];
   }
 
   saveAddress(): void {

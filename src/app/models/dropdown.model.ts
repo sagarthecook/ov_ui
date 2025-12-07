@@ -1,4 +1,4 @@
-export class Country {
+export class DropdownModel {
     id:number;
     name:string;
     isActive:boolean;

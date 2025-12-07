@@ -143,7 +143,7 @@
                 formControlName="state"
                 (selectionChange)="onStateChange($event.value)"
               >
-                <mat-option *ngFor="let s of filteredStates" [value]="s.code"
+                <mat-option *ngFor="let s of states" [value]="s.id"
                   >{{ s.name }}</mat-option
                 >
               </mat-select>
@@ -155,7 +155,7 @@
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>City</mat-label>
               <mat-select formControlName="city">
-                <mat-option *ngFor="let ct of filteredCities" [value]="ct.code"
+                <mat-option *ngFor="let ct of cities" [value]="ct.id"
                   >{{ ct.name }}</mat-option
                 >
               </mat-select>
