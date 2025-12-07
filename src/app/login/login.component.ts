@@ -63,6 +63,13 @@ export class LoginComponent implements OnInit {
     return this.otpForm.get('email');
   }
 
+
+  navigateToUsercreation(): void{ 
+    this.router.navigate(['/userregistration']);
+    
+  }
+
+
   login() : void {
     debugger;
     // Login logic here
