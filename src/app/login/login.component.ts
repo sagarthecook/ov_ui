@@ -10,6 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { IfDirective } from '../shared/if.directive'; // <-- added
 import { LoginService } from '../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'login',
@@ -40,15 +41,15 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router : Router
   ) {
-    debugger;
     this.otpForm = this.formBuilder.group({});
     this.loginForm = this.formBuilder.group({});
   }
 
   ngOnInit(): void {
-     this.screenNumber = 1;
+    this.screenNumber = 1;
     this.otpForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]]
     });
@@ -70,6 +71,7 @@ export class LoginComponent implements OnInit {
         this.successMessage = 'Login successful!';  
         this.errorMessage = '';
         // Further actions on successful login
+        this.router.navigate(['/home']);
       },
       (errorResponse) => {
         this.errorMessage = 'Login failed. Please try again.';
