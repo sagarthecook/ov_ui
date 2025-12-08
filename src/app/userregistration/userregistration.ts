@@ -12,6 +12,7 @@ import { UserService } from '../services/user.service';
 import { APIResponse } from '../models/ApiResponse';
 import { DropdownModel } from '../models/dropdown.model';
 import { IfDirective } from '../shared/if.directive';
+import { MatGridList, MatGridListModule } from '@angular/material/grid-list';
 
 @Component({
   selector: 'userregistration',
@@ -26,6 +27,7 @@ import { IfDirective } from '../shared/if.directive';
     MatIconModule,
     MatProgressSpinnerModule,
     MatSelectModule,
+    MatGridListModule,
     IfDirective
   ],
   templateUrl: './userregistration.html',
@@ -55,6 +57,7 @@ export class UserRegistration implements OnInit {
   };
 
   savedAddress: any = null;
+  savedAddresses: any[] = []; // array to store all saved addresses for grid display
 
 
 
@@ -180,6 +183,8 @@ export class UserRegistration implements OnInit {
         this.savedAddress = addr.value;
         this.loading = false;
         this.successMessage = 'Address saved.';
+        // add saved address to grid list
+        this.savedAddresses.push(addr.value);
         // clear address form after successful save
         addr.reset();
         this.states = [];

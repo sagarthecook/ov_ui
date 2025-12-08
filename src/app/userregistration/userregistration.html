@@ -119,7 +119,7 @@
           </mat-form-field>
         </div>
 
-        <div style="width: 30%; border: 2px solid gray; padding: 16px;">
+        <div style="width: 40%; border: 2px solid gray; padding: 16px;">
           <h3>Address Details</h3>
           <div
             style="display: flex; flex-direction: row; gap: 16px"
@@ -197,20 +197,36 @@
                   >Enter a valid 6-digit zip code</mat-error
                 >
               </mat-form-field>
-              <!-- address save button -->
-              <button
-                mat-stroked-button
-                type="button"
-                (click)="saveAddress()"
-                [disabled]="address.invalid || loading"
-              >
-                <mat-icon>save</mat-icon>
-                Save Address
-              </button>
             </div>
           </div>
-        </div>
 
+          <!-- address save button -->
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="saveAddress()"
+            [disabled]="address.invalid || loading"
+          >
+            <mat-icon>save</mat-icon>
+            Save Address
+          </button>
+
+          <!-- mat-grid-list below address button -->
+          <div style="margin-top: 20px;">
+            <mat-grid-list cols="5" rowHeight="100px">
+              <!-- <mat-grid-tile *ngFor="let addr of savedAddresses; let i = index">
+                <div style="text-align: center; width: 100%;">
+                  <strong>Address {{ i + 1 }}</strong><br />
+                  Country: {{ addr.countryId }}<br />
+                  State: {{ addr.stateId }}<br />
+                  City: {{ addr.cityId }}<br />
+                  Street: {{ addr.street }}<br />
+                  Zip: {{ addr.zipCode }}
+                </div>
+              </mat-grid-tile> -->
+            </mat-grid-list>
+          </div>
+        </div>
       </form>
     </mat-card-content>
 
