@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { UserService } from '../services/user.service';
 import { APIResponse } from '../models/ApiResponse';
 import { DropdownModel } from '../models/dropdown.model';
+import { IfDirective } from '../shared/if.directive';
 
 @Component({
   selector: 'userregistration',
@@ -24,7 +25,8 @@ import { DropdownModel } from '../models/dropdown.model';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatSelectModule
+    MatSelectModule,
+    IfDirective
   ],
   templateUrl: './userregistration.html',
   styleUrls: ['./userregistration.scss']
@@ -66,11 +68,11 @@ export class UserRegistration implements OnInit {
       phoneNo: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), this.noLeadingTrailingSpaces]],
       // add nested address form group
       address: this.formBuilder.group({
-        country: ['', [Validators.required]],
-        state: ['', [Validators.required]],
-        city: ['', [Validators.required]],
+        countryId: ['', [Validators.required]],
+        stateId: ['', [Validators.required]],
+        cityId: ['', [Validators.required]],
         street: ['', [Validators.required, Validators.maxLength(200), this.noLeadingTrailingSpaces]],
-        pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/), this.noLeadingTrailingSpaces]]
+        zipCode: ['', [Validators.required, Validators.pattern(/^\d{6}$/), this.noLeadingTrailingSpaces]]
       })
 
        
@@ -117,6 +119,16 @@ export class UserRegistration implements OnInit {
 
   onStateChange(stateCode: string) {
     // call city api to get cities for selected state
+    this.userService.getCities(stateCode).subscribe(
+      (response: APIResponse<DropdownModel[]>) => {
+        if (response && response.data) {
+          this.cities = response.data;
+        }
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load cities.';
+      }
+    );  
   }
 
   onSubmit(): void {
@@ -163,10 +175,24 @@ export class UserRegistration implements OnInit {
     }
 
     this.loading = true;
-    // Simulate save (replace with actual service call if needed)
-
-    this.savedAddress = addr.value;
-    this.loading = false;
-    this.successMessage = 'Address saved.';
+    this.userService.saveAddress(addr.value).subscribe(
+      (response) => {
+        this.savedAddress = addr.value;
+        this.loading = false;
+        this.successMessage = 'Address saved.';
+        // clear address form after successful save
+        addr.reset();
+        this.states = [];
+        this.cities = [];
+        // optionally auto-clear success message after 3 seconds
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
+      },
+      (error) => {
+        this.errorMessage = 'Failed to save address.';
+        this.loading = false;
+      }
+    );
   }
 }

@@ -7,13 +7,13 @@
 
     <mat-card-content>
       <!-- Success Message -->
-      <div *ngIf="successMessage" class="success-message">
+      <div *if="successMessage" class="success-message">
         <mat-icon>check_circle</mat-icon>
         <span>{{ successMessage }}</span>
       </div>
 
       <!-- Error Message -->
-      <div *ngIf="errorMessage" class="error-message">
+      <div *if="errorMessage" class="error-message">
         <mat-icon>error</mat-icon>
         <span>{{ errorMessage }}</span>
       </div>
@@ -119,92 +119,98 @@
           </mat-form-field>
         </div>
 
-        <!-- Address and dob -->
-        <div style="display: flex; flex-direction: row; gap: 16px;" formGroupName="address">
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Country</mat-label>
-              <mat-select
-                formControlName="country"
-                (selectionChange)="onCountryChange($event.value)"
-              >
-                <mat-option *ngFor="let c of countries" [value]="c.id"
-                  >{{ c.name }}</mat-option
+        <div style="width: 30%; border: 2px solid gray; padding: 16px;">
+          <h3>Address Details</h3>
+          <div
+            style="display: flex; flex-direction: row; gap: 16px"
+            formGroupName="address"
+          >
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Country</mat-label>
+                <mat-select
+                  formControlName="countryId"
+                  (selectionChange)="onCountryChange($event.value)"
                 >
-              </mat-select>
-              <mat-error *ngIf="address.get('country')?.hasError('required')"
-                >Country is required</mat-error
-              >
-            </mat-form-field>
+                  <mat-option *ngFor="let c of countries" [value]="c.id"
+                    >{{ c.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error *ngIf="address.get('countryId')?.hasError('required')"
+                  >Country is required</mat-error
+                >
+              </mat-form-field>
 
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>State</mat-label>
-              <mat-select
-                formControlName="state"
-                (selectionChange)="onStateChange($event.value)"
-              >
-                <mat-option *ngFor="let s of states" [value]="s.id"
-                  >{{ s.name }}</mat-option
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>State</mat-label>
+                <mat-select
+                  formControlName="stateId"
+                  (selectionChange)="onStateChange($event.value)"
                 >
-              </mat-select>
-              <mat-error *ngIf="address.get('state')?.hasError('required')"
-                >State is required</mat-error
-              >
-            </mat-form-field>
+                  <mat-option *ngFor="let s of states" [value]="s.id"
+                    >{{ s.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error *ngIf="address.get('stateId')?.hasError('required')"
+                  >State is required</mat-error
+                >
+              </mat-form-field>
 
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>City</mat-label>
-              <mat-select formControlName="city">
-                <mat-option *ngFor="let ct of cities" [value]="ct.id"
-                  >{{ ct.name }}</mat-option
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>City</mat-label>
+                <mat-select formControlName="cityId">
+                  <mat-option *ngFor="let ct of cities" [value]="ct.id"
+                    >{{ ct.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error *ngIf="address.get('cityId')?.hasError('required')"
+                  >City is required</mat-error
                 >
-              </mat-select>
-              <mat-error *ngIf="address.get('city')?.hasError('required')"
-                >City is required</mat-error
+              </mat-form-field>
+            </div>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Street</mat-label>
+                <input
+                  matInput
+                  formControlName="street"
+                  placeholder="Street / Locality"
+                  [disabled]="loading"
+                />
+                <mat-error *ngIf="address.get('street')?.hasError('required')"
+                  >Street is required</mat-error
+                >
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Zip Code</mat-label>
+                <input
+                  matInput
+                  formControlName="zipCode"
+                  placeholder="6-digit zip code"
+                  [disabled]="loading"
+                />
+                <mat-error *ngIf="address.get('zipCode')?.hasError('required')"
+                  >Zip Code is required</mat-error
+                >
+                <mat-error *ngIf="address.get('zipCode')?.hasError('pattern')"
+                  >Enter a valid 6-digit zip code</mat-error
+                >
+              </mat-form-field>
+              <!-- address save button -->
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="saveAddress()"
+                [disabled]="address.invalid || loading"
               >
-            </mat-form-field>
+                <mat-icon>save</mat-icon>
+                Save Address
+              </button>
+            </div>
           </div>
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Street</mat-label>
-              <input
-                matInput
-                formControlName="street"
-                placeholder="Street / Locality"
-                [disabled]="loading"
-              />
-              <mat-error *ngIf="address.get('street')?.hasError('required')"
-                >Street is required</mat-error
-              >
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Pincode</mat-label>
-              <input
-                matInput
-                formControlName="pincode"
-                placeholder="6-digit pincode"
-                [disabled]="loading"
-              />
-              <mat-error *ngIf="address.get('pincode')?.hasError('required')"
-                >Pincode is required</mat-error
-              >
-              <mat-error *ngIf="address.get('pincode')?.hasError('pattern')"
-                >Enter a valid 6-digit pincode</mat-error
-              >
-            </mat-form-field>
-                      <!-- address save button -->
-            <button
-              mat-stroked-button
-              type="button"
-              (click)="saveAddress()"
-              [disabled]="address.invalid || loading">
-              <mat-icon>save</mat-icon>
-              Save Address
-            </button>
-          </div>
-
         </div>
+
       </form>
     </mat-card-content>
 
