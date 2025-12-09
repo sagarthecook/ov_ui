@@ -7,5 +7,6 @@ export enum URLConstants {
     GET_STATES = '/v1/states/by-country/',
     GET_COUNTRIES = '/v1/country/list',
     REGISTER_USER = '/v1/user/register',
-    ADDRESS_SAVE = '/v1/address/'
+    ADDRESS_SAVE = '/v1/address/',
+    USER_DETAILS_SAVE = '/v1/user_detail'
 }

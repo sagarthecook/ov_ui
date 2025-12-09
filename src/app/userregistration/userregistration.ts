@@ -8,11 +8,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTableModule } from '@angular/material/table';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { UserService } from '../services/user.service';
 import { APIResponse } from '../models/ApiResponse';
 import { DropdownModel } from '../models/dropdown.model';
 import { IfDirective } from '../shared/if.directive';
-import { MatGridList, MatGridListModule } from '@angular/material/grid-list';
 
 @Component({
   selector: 'userregistration',
@@ -28,6 +31,9 @@ import { MatGridList, MatGridListModule } from '@angular/material/grid-list';
     MatProgressSpinnerModule,
     MatSelectModule,
     MatGridListModule,
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     IfDirective
   ],
   templateUrl: './userregistration.html',
@@ -57,9 +63,12 @@ export class UserRegistration implements OnInit {
   };
 
   savedAddress: any = null;
-  savedAddresses: any[] = []; // array to store all saved addresses for grid display
+ addressButtonLoading = false;
+  // table config
+  displayedColumns: string[] = ['index', 'country', 'state', 'city', 'street', 'zip'];
+  savedAddresses: any[] = []; // will store display-ready address objects
 
-
+maxDate: Date = new Date(); //
 
   ngOnInit(): void {
     this.registrationForm = this.formBuilder.group({
@@ -69,6 +78,7 @@ export class UserRegistration implements OnInit {
       emailId: ['', [Validators.required, Validators.email, this.noLeadingTrailingSpaces]],
       aadharNumber: ['', [Validators.required, Validators.pattern(/^\d{12}$/), this.noLeadingTrailingSpaces]],
       phoneNo: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), this.noLeadingTrailingSpaces]],
+      dob: ['', [Validators.required]],
       // add nested address form group
       address: this.formBuilder.group({
         countryId: ['', [Validators.required]],
@@ -76,11 +86,10 @@ export class UserRegistration implements OnInit {
         cityId: ['', [Validators.required]],
         street: ['', [Validators.required, Validators.maxLength(200), this.noLeadingTrailingSpaces]],
         zipCode: ['', [Validators.required, Validators.pattern(/^\d{6}$/), this.noLeadingTrailingSpaces]]
-      })
-
-       
+      })       
     });
-
+   const todayDate = new Date();
+    this.maxDate =   new Date(todayDate.getFullYear() - 18, todayDate.getMonth(), todayDate.getDate());
     // initialize filtered lists if needed
     this.states = [];
     this.cities = [];
@@ -147,7 +156,17 @@ export class UserRegistration implements OnInit {
     const formData = this.registrationForm.value;
 
     // TODO: Call registration service here
-    // this.registrationService.register(formData).subscribe(...)
+   this.userService.saveUserDetails(formData).subscribe(
+      (response) => {
+        // handle success if needed
+          debugger;
+        // this.successMessage = 'Registration successful!';
+        this.loading = false;
+      },
+      (error) => {
+        this.errorMessage = 'Registration failed. Please try again.';
+      }
+    );    
 
     this.loading = false;
     this.successMessage = 'Registration successful!';
@@ -159,6 +178,7 @@ export class UserRegistration implements OnInit {
     this.successMessage = '';
     this.states = [];
     this.cities = [];
+    this.savedAddresses = []; 
   }
 
   saveAddress(): void {
@@ -178,17 +198,38 @@ export class UserRegistration implements OnInit {
     }
 
     this.loading = true;
+    this.addressButtonLoading= true;
     this.userService.saveAddress(addr.value).subscribe(
       (response) => {
-        this.savedAddress = addr.value;
+        // resolve names for display
+        const val = addr.value;
+        const countryName = this.countries.find(c => c.id === val.countryId)?.name || val.countryId;
+        const stateName = this.states.find(s => s.id === val.stateId)?.name || val.stateId;
+        const cityName = this.cities.find(ct => ct.id === val.cityId)?.name || val.cityId;
+
+        const displayObj = {
+          countryId: val.countryId,
+          countryName,
+          stateId: val.stateId,
+          stateName,
+          cityId: val.cityId,
+          cityName,
+          street: val.street,
+          zipCode: val.zipCode
+        };
+
+        this.savedAddress = val;
         this.loading = false;
         this.successMessage = 'Address saved.';
-        // add saved address to grid list
-        this.savedAddresses.push(addr.value);
+
+        // add display object to table data
+        this.savedAddresses.push(displayObj);
+
         // clear address form after successful save
-        addr.reset();
+        // addr.reset();
         this.states = [];
         this.cities = [];
+
         // optionally auto-clear success message after 3 seconds
         setTimeout(() => {
           this.successMessage = '';

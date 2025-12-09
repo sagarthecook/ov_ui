@@ -26,5 +26,13 @@ export class UserService {
     public saveAddress(address: any): Observable<APIResponse<any>> {
         return this.httpClient.post<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.ADDRESS_SAVE, address);
     }
+
+    public saveUserDetails(userDetails: any): Observable<APIResponse<any>> {
+            const formData = new FormData();
+           formData.append('photo', "");
+           formData.append('user',userDetails);
+
+        return this.httpClient.post<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.USER_DETAILS_SAVE, formData);
+    }
 }
 

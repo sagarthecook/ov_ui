@@ -117,9 +117,11 @@
               Phone Number is required
             </mat-error>
           </mat-form-field>
-        </div>
 
-        <div style="width: 40%; border: 2px solid gray; padding: 16px;">
+
+        </div>
+ <div class="form-row">
+        <div style="border: 2px solid gray; padding: 16px;">
           <h3>Address Details</h3>
           <div
             style="display: flex; flex-direction: row; gap: 16px"
@@ -205,28 +207,78 @@
             mat-stroked-button
             type="button"
             (click)="saveAddress()"
-            [disabled]="address.invalid || loading"
+            [disabled]="address.invalid || addressButtonLoading"
           >
             <mat-icon>save</mat-icon>
             Save Address
           </button>
 
-          <!-- mat-grid-list below address button -->
-          <div style="margin-top: 20px;">
-            <mat-grid-list cols="5" rowHeight="100px">
-              <!-- <mat-grid-tile *ngFor="let addr of savedAddresses; let i = index">
-                <div style="text-align: center; width: 100%;">
-                  <strong>Address {{ i + 1 }}</strong><br />
-                  Country: {{ addr.countryId }}<br />
-                  State: {{ addr.stateId }}<br />
-                  City: {{ addr.cityId }}<br />
-                  Street: {{ addr.street }}<br />
-                  Zip: {{ addr.zipCode }}
-                </div>
-              </mat-grid-tile> -->
-            </mat-grid-list>
+          <!-- mat-table below address button -->
+          <div style="margin-top: 20px;" *ngIf="savedAddresses?.length">
+            <table mat-table [dataSource]="savedAddresses" class="mat-elevation-z8" style="width:100%">
+
+              <!-- Index Column -->
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+              </ng-container>
+
+              <!-- Country Column -->
+              <ng-container matColumnDef="country">
+                <th mat-header-cell *matHeaderCellDef>Country</th>
+                <td mat-cell *matCellDef="let element">{{ element.countryName }}</td>
+              </ng-container>
+
+              <!-- State Column -->
+              <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef>State</th>
+                <td mat-cell *matCellDef="let element">{{ element.stateName }}</td>
+              </ng-container>
+
+              <!-- City Column -->
+              <ng-container matColumnDef="city">
+                <th mat-header-cell *matHeaderCellDef>City</th>
+                <td mat-cell *matCellDef="let element">{{ element.cityName }}</td>
+              </ng-container>
+
+              <!-- Street Column -->
+              <ng-container matColumnDef="street">
+                <th mat-header-cell *matHeaderCellDef>Street</th>
+                <td mat-cell *matCellDef="let element">{{ element.street }}</td>
+              </ng-container>
+
+              <!-- Zip Column -->
+              <ng-container matColumnDef="zip">
+                <th mat-header-cell *matHeaderCellDef>Zip</th>
+                <td mat-cell *matCellDef="let element">{{ element.zipCode }}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
           </div>
         </div>
+        <div style="width: 40%;">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Date of Birth</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="dob"
+              placeholder="Select your date of birth"
+              [max]="maxDate"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>cake</mat-icon>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="registrationForm.get('dob')?.hasError('required')">
+              Date of Birth is required & You must be at least 18 years old
+            </mat-error>
+          </mat-form-field>
+        </div>
+ </div>
+
       </form>
     </mat-card-content>
 
