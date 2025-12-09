@@ -52,7 +52,7 @@ export class UserRegistration implements OnInit {
 
   states: DropdownModel[] = [];
   cities: DropdownModel[] = [];
-
+  selectedPhoto: File | null = null;
   // Validator: rejects values that start or end with whitespace
   private noLeadingTrailingSpaces: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const val = control.value;
@@ -64,6 +64,7 @@ export class UserRegistration implements OnInit {
 
   savedAddress: any = null;
  addressButtonLoading = false;
+ addressId : string = '';
   // table config
   displayedColumns: string[] = ['index', 'country', 'state', 'city', 'street', 'zip'];
   savedAddresses: any[] = []; // will store display-ready address objects
@@ -156,20 +157,19 @@ maxDate: Date = new Date(); //
     const formData = this.registrationForm.value;
 
     // TODO: Call registration service here
-   this.userService.saveUserDetails(formData).subscribe(
+   this.userService.saveUserDetails(formData, this.selectedPhoto, this.addressId).subscribe(
       (response) => {
         // handle success if needed
           debugger;
-        // this.successMessage = 'Registration successful!';
+        this.successMessage = 'Registration successful!';
         this.loading = false;
       },
       (error) => {
+        this.loading = false;
+
         this.errorMessage = 'Registration failed. Please try again.';
       }
-    );    
-
-    this.loading = false;
-    this.successMessage = 'Registration successful!';
+    );   
   }
 
   onClear(): void {
@@ -229,7 +229,7 @@ maxDate: Date = new Date(); //
         // addr.reset();
         this.states = [];
         this.cities = [];
-
+        this.addressId = response.data;
         // optionally auto-clear success message after 3 seconds
         setTimeout(() => {
           this.successMessage = '';
