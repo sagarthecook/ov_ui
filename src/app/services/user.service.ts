@@ -27,18 +27,27 @@ export class UserService {
         return this.httpClient.post<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.ADDRESS_SAVE, address);
     }
 
-    public saveUserDetails(userDetails: any, photo: File | null, addressId: string): Observable<APIResponse<any>> {
+    public saveUserDetails(userDetails: any, photo: File | null, addressId: string, roleId: string): Observable<APIResponse<any>> {
             const formData = new FormData();
            if (photo) {
                formData.append('photo', photo);
            }
            userDetails.address = {};
+           userDetails.role = {};
+           userDetails.role = {
+             id: roleId 
+            };
+
            userDetails.address = {
                 id: addressId
            }
            formData.append('user', JSON.stringify(userDetails));
 
         return this.httpClient.post<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.USER_DETAILS_SAVE, formData);
+    }
+
+    public getUserRoles(): Observable<APIResponse<DropdownModel[]>> {
+        return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_USER_ROLES);
     }
 }
 

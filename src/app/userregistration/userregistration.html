@@ -276,6 +276,20 @@
               Date of Birth is required & You must be at least 18 years old
             </mat-error>
           </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Role</mat-label>
+                <mat-select
+                  formControlName="role"
+                  (selectionChange)="roleChange($event.value)"
+                >
+                  <mat-option *ngFor="let c of userRoles" [value]="c.id"
+                    >{{ c.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error *ngIf="registrationForm.get('role')?.hasError('required')"
+                  >Role is required</mat-error
+                >
+              </mat-form-field>
         </div>
  </div>
 
