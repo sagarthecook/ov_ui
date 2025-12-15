@@ -79,12 +79,15 @@ export class LoginComponent implements OnInit {
         this.errorMessage = '';
         // Further actions on successful login
         this.router.navigate(['/home']);
+        // add token into  localStorage.getItem('auth_token');
+        localStorage.setItem('auth_token', response.data);
       },
       (errorResponse) => {
         this.errorMessage = 'Login failed. Please try again.';
         this.successMessage = '';
         if(errorResponse.error && errorResponse.error.errors && errorResponse.error.errors.length > 0) {
           this.errorMessage = errorResponse.error.errors[0];
+         
         }
       }
     );
