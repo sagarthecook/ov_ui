@@ -1,0 +1,139 @@
+.home-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  .navbar-title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+}
+
+.sidenav-container {
+  flex: 1;
+  margin-top: 64px; // Account for fixed toolbar height
+}
+
+.sidebar {
+  width: 280px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #dee2e6;
+
+  .menu-item {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 4px 8px;
+    border-radius: 6px;
+    
+    &:hover {
+      background-color: #e9ecef;
+    }
+
+    &.active {
+      background-color: #007bff;
+      color: white;
+
+      mat-icon {
+        color: white;
+      }
+    }
+
+    .expand-icon {
+      transition: transform 0.3s ease;
+      
+      &.expanded {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background-color: #f1f3f4;
+    margin: 0 8px;
+    border-radius: 6px;
+
+    &.expanded {
+      max-height: 300px;
+    }
+
+    .submenu-item {
+      padding-left: 56px;
+      min-height: 40px;
+      margin: 2px 0;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #e9ecef;
+      }
+
+      &.active-submenu {
+        background-color: #007bff;
+        color: white;
+
+        .submenu-title {
+          color: white;
+        }
+      }
+
+      .submenu-title {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.main-content {
+  background-color: #ffffff;
+}
+
+.content-wrapper {
+  padding: 24px;
+  min-height: calc(100vh - 88px);
+}
+
+.icon-placeholder {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.submenu-icon.icon-placeholder {
+  width: 20px;
+  height: 20px;
+  font-size: 10px;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+  }
+  
+  .content-wrapper {
+    padding: 16px;
+  }
+}

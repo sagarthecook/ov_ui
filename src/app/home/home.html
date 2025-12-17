@@ -1,2 +1,91 @@
-<p>home works!</p>
+<div class="home-container">
+  <!-- Top Navigation Bar -->
+  <mat-toolbar color="primary" class="navbar">
+    <button mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="navbar-title">Online Voting System</span>
+    
+    <span class="spacer"></span>
+    
+    <!-- User Menu -->
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>person</mat-icon>
+        <span>Profile</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <!-- Sidebar and Content Container -->
+  <mat-sidenav-container class="sidenav-container">
+    <!-- Sidebar -->
+    <mat-sidenav #sidenav mode="side" opened class="sidebar">
+      <mat-nav-list>
+        <ng-container *ngFor="let item of menuItems">
+          <!-- Menu items with submenus -->
+          <div *ngIf="item.subMenus && item.subMenus.length > 0; else singleItem">
+            <mat-list-item (click)="toggleSubmenu(item)" class="menu-item">
+              <!-- Use Material Icon or show first letter -->
+              <mat-icon matListItemIcon *ngIf="item.icon; else firstLetter">{{ item.icon }}</mat-icon>
+              <ng-template #firstLetter>
+                <div matListItemIcon class="icon-placeholder">{{ item.menuName.charAt(0) }}</div>
+              </ng-template>
+              <span matListItemTitle>{{ item.menuName }}</span>
+              <mat-icon matListItemMeta class="expand-icon" 
+                       [class.expanded]="item.expanded">
+                expand_more
+              </mat-icon>
+            </mat-list-item>
+            
+            <!-- Submenu items -->
+            <div class="submenu" [class.expanded]="item.expanded">
+              <mat-list-item 
+                *ngFor="let subitem of item.subMenus" 
+                [routerLink]="subitem.link"
+                routerLinkActive="active-submenu"
+                class="submenu-item">
+                <!-- Use Material Icon or show first letter for submenu -->
+                <mat-icon matListItemIcon *ngIf="subitem.icon; else subFirstLetter" class="submenu-icon">{{ subitem.icon }}</mat-icon>
+                <ng-template #subFirstLetter>
+                  <div matListItemIcon class="icon-placeholder submenu-icon">{{ subitem.menuName.charAt(0) }}</div>
+                </ng-template>
+                <span matListItemTitle class="submenu-title">{{ subitem.menuName }}</span>
+              </mat-list-item>
+            </div>
+          </div>
+
+          <!-- Single menu items -->
+          <ng-template #singleItem>
+            <mat-list-item 
+              [routerLink]="item.link"
+              routerLinkActive="active"
+              class="menu-item">
+              <!-- Use Material Icon or show first letter -->
+              <mat-icon matListItemIcon *ngIf="item.icon; else singleFirstLetter">{{ item.icon }}</mat-icon>
+              <ng-template #singleFirstLetter>
+                <div matListItemIcon class="icon-placeholder">{{ item.menuName.charAt(0) }}</div>
+              </ng-template>
+              <span matListItemTitle>{{ item.menuName }}</span>
+            </mat-list-item>
+          </ng-template>
+        </ng-container>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <!-- Main Content Area -->
+    <mat-sidenav-content class="main-content">
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
 

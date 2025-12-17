@@ -4,6 +4,8 @@ import { URLConstants } from "../contants/url.enum";
 import { Observable } from "rxjs";
 import { APIResponse } from "../models/ApiResponse";
 import { DropdownModel } from "../models/dropdown.model";
+import { MenuItem } from "../models/menu.model";
+
 
 @Injectable({
     providedIn: 'root'
@@ -25,6 +27,10 @@ export class UserService {
 
     public saveAddress(address: any): Observable<APIResponse<any>> {
         return this.httpClient.post<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.ADDRESS_SAVE, address);
+    }
+
+    public getMenuItems(): Observable<APIResponse<MenuItem[]>> {
+        return this.httpClient.get<APIResponse<MenuItem[]>>(URLConstants.BASE_URL + URLConstants.GET_MENU_ITEMS);
     }
 
     public saveUserDetails(userDetails: any, photo: File | null, addressId: string, roleId: string): Observable<APIResponse<any>> {
