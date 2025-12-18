@@ -33,6 +33,10 @@ export class UserService {
         return this.httpClient.get<APIResponse<MenuItem[]>>(URLConstants.BASE_URL + URLConstants.GET_MENU_ITEMS);
     }
 
+    public getVoterDetailsList(): Observable<APIResponse<any[]>> {
+        return this.httpClient.get<APIResponse<any[]>>(URLConstants.BASE_URL + URLConstants.GET_VOTER_DETAILS_LIST);
+    }
+
     public saveUserDetails(userDetails: any, photo: File | null, addressId: string, roleId: string): Observable<APIResponse<any>> {
             const formData = new FormData();
            if (photo) {
@@ -54,6 +58,17 @@ export class UserService {
 
     public getUserRoles(): Observable<APIResponse<DropdownModel[]>> {
         return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_USER_ROLES);
+    }
+
+    public getVotersForVerification(): Observable<APIResponse<any[]>> {
+        return this.httpClient.get<APIResponse<any[]>>(URLConstants.BASE_URL + '/voters/pending-verification');
+    }
+
+    public updateVoterVerificationStatus(voterId: string, status: string): Observable<APIResponse<any>> {
+        return this.httpClient.put<APIResponse<any>>(
+            URLConstants.BASE_URL + `/voters/${voterId}/verification-status`, 
+            { status }
+        );
     }
 }
 
