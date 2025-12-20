@@ -141,6 +141,7 @@ export class VoterVerification implements OnInit {
 
   private updateVerificationStatus(voterId: string, status: 'Approved' | 'Rejected'): void {
     this.loading = true;
+    debugger;
     this.userService.updateVoterVerificationStatus(voterId, status).subscribe(
       (response: APIResponse<any>) => {
         if (response.success) {
@@ -158,6 +159,7 @@ export class VoterVerification implements OnInit {
           );
         }
         this.loading = false;
+         this.loadVoters();
       },
       (error) => {
         this.snackBar.open('Failed to update verification status', 'Close', { duration: 3000 });
