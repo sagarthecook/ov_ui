@@ -1,5 +1,5 @@
 <div class="voter-verification-container">
-  <mat-card class="filter-card">
+  <!-- <mat-card class="filter-card">
     <mat-card-header>
       <mat-card-title>Voter Verification</mat-card-title>
       <mat-card-subtitle>Review and verify voter registrations</mat-card-subtitle>
@@ -29,10 +29,16 @@
         </button>
       </form>
     </mat-card-content>
-  </mat-card>
+  </mat-card> -->
 
   <mat-card class="table-card">
+    <mat-card-title>Voter Verification</mat-card-title>
     <div class="table-container">
+      @if (dataSource.data.length ==0) {
+        <div >
+          <p style="color: red; font-size:30px">No voter registrations found.</p>
+        </div>
+      }
       <table mat-table [dataSource]="dataSource" matSort>
         
         <!-- ID Column -->
