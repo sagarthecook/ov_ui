@@ -78,6 +78,7 @@ export class Home implements OnInit {
 
   // Method to navigate directly to child components
   navigateToChild(childRoute: string): void {
+    debugger;
     this.router.navigate(['/home', childRoute]);
   }
 
