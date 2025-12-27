@@ -68,45 +68,13 @@ export class ElectionVerification implements OnInit {
 
   // Sample data
   elections: ElectionData[] = [
-    {
-      electionId: 3,
-      electionName: "General Assembly Elections 2026",
-      electionDate: "2024-06-15",
-      resultDate: "2024-06-18",
-      country: "INDIA",
-      state: "Karnataka",
-      city: "Solapur",
-      officer: "Aishwarya Rajesh Ghogardare",
-      status: "Pending"
-    },
-    {
-      electionId: 4,
-      electionName: "Local Municipal Elections 2024",
-      electionDate: "2024-07-20",
-      resultDate: "2024-07-23",
-      country: "INDIA",
-      state: "Maharashtra",
-      city: "Mumbai",
-      officer: "Rajesh Kumar Sharma",
-      status: "Approved"
-    },
-    {
-      electionId: 5,
-      electionName: "State Legislative Elections 2025",
-      electionDate: "2024-08-10",
-      resultDate: "2024-08-13",
-      country: "INDIA",
-      state: "Tamil Nadu",
-      city: "Chennai",
-      officer: "Priya Nair",
-      status: "Rejected"
-    }
   ];
 
   constructor(private snackBar: MatSnackBar, private electionService: ElectionService) {}
 
   ngOnInit() {
     this.dataSource.data = this.elections;
+    this.loadElectionData('Pending');
   }
 
   ngAfterViewInit() {
@@ -123,11 +91,8 @@ export class ElectionVerification implements OnInit {
     }
   }
 
-  filterByStatus(status: string) {
-
-    if (status) {
-      debugger;
-      this.electionService.getElectionsForVerification (status).subscribe(
+  loadElectionData(status : string) {
+        this.electionService.getElectionsForVerification (status).subscribe(
         (response:any) => {
           if (response && response.data) {
             this.dataSource.data = response.data;
@@ -137,6 +102,13 @@ export class ElectionVerification implements OnInit {
           console.error('Failed to load elections for verification.', error);
         }
       );  
+  }
+
+  filterByStatus(status: string) {
+
+    if (status) {
+      debugger;
+  this.loadElectionData(status);
     } else {
       this.dataSource.filter = '';
     }
@@ -165,18 +137,42 @@ export class ElectionVerification implements OnInit {
   }
 
   approveElection(election: ElectionData) {
-    election.status = 'Approved';
-    this.dataSource.data = [...this.dataSource.data];
-    this.snackBar.open(`Election "${election.electionName}" has been approved`, 'Close', {
-      duration: 3000
-    });
+    debugger;
+    this.electionService.updateElectionStatus(election.electionId, 'Approved').subscribe(
+      (response:any) => {
+        election.status = 'Approved'; 
+        this.dataSource.data = [...this.dataSource.data];
+        this.snackBar.open(`Election "${election.electionName}" has been approved`, 'Close', {
+          duration: 3000
+        });
+      } ,
+      (error:any) => {  
+        console.error('Failed to approve election.', error);
+        this.snackBar.open(`Failed to approve election "${election.electionName}". Please try again.`, 'Close', {
+          duration: 3000
+        });
+      }
+    );
+
   }
 
   rejectElection(election: ElectionData) {
-    election.status = 'Rejected';
-    this.dataSource.data = [...this.dataSource.data];
-    this.snackBar.open(`Election "${election.electionName}" has been rejected`, 'Close', {
-      duration: 3000
-    });
+  this.electionService.updateElectionStatus(election.electionId, 'Rejected').subscribe(
+      (response:any) => {
+        election.status = 'Rejected'; 
+        this.dataSource.data = [...this.dataSource.data];
+        this.snackBar.open(`Election "${election.electionName}" has been rejected`, 'Close', {
+          duration: 3000
+        });
+      } ,
+      (error:any) => {  
+        console.error('Failed to reject election.', error);
+        this.snackBar.open(`Failed to reject election "${election.electionName}". Please try again.`, 'Close', {
+          duration: 3000
+        });
+      }
+    );
+
+   
   }
 }

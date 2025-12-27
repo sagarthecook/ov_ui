@@ -19,4 +19,9 @@ export class ElectionService {
         return this.httpClient.get<APIResponse<any[]>>(URLConstants.BASE_URL + `/v1/election/findbystatus?status=${status}`);
     }   
 
+    public updateElectionStatus(electionId: number, status: string): Observable<APIResponse<any>> {
+      const reqBody = { status: status };
+        return this.httpClient.patch<APIResponse<any>>(URLConstants.BASE_URL + `/v1/election/status/`+
+            electionId, reqBody);
+    }
 }
