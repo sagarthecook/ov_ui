@@ -82,5 +82,11 @@ export class UserService {
             { status }
         );
     }
+
+    public getOfficers(): Observable<APIResponse<DropdownModel[]>> {
+        return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_OFFICERS);
+    }   
+
+   
 }
 

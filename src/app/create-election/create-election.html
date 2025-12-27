@@ -1,1 +1,164 @@
-<p>create-election works!</p>
+<div >
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>Create new Election</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Success Message -->
+      <div *if="successMessage" class="success-message">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ successMessage }}</span>
+      </div>
+
+      <!-- Error Message -->
+      <div *if="errorMessage" class="error-message">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <form [formGroup]="electionCreationForm" (ngSubmit)="onSubmit()">
+        <!-- Name Fields Row -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Election Name</mat-label>
+            <input
+              matInput
+              formControlName="electionName"
+              placeholder="Enter election name"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error
+              *ngIf="electionCreationForm.get('electionName')?.hasError('required')"
+            >
+              Election Name is required
+            </mat-error>
+          </mat-form-field>
+
+         <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Election Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="electionPicker"
+              formControlName="electionDate"
+              placeholder="Select election date"
+              [min]="minDate"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>event</mat-icon>
+            <mat-datepicker-toggle matIconSuffix [for]="electionPicker"></mat-datepicker-toggle>
+            <mat-datepicker #electionPicker></mat-datepicker>
+            <mat-error *ngIf="electionCreationForm.get('electionDate')?.hasError('required')">
+              Election Date is required
+            </mat-error>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Election Result Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="resultPicker"
+              formControlName="resultDate"
+              placeholder="Select Result date"
+              [min]="minDate"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>event</mat-icon>
+            <mat-datepicker-toggle matIconSuffix [for]="resultPicker"></mat-datepicker-toggle>
+            <mat-datepicker #resultPicker></mat-datepicker>
+            <mat-error *ngIf="electionCreationForm.get('resultDate')?.hasError('required')">
+              Election Result Date is required
+            </mat-error>
+          </mat-form-field>
+          
+        </div>
+         <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Country</mat-label>
+                <mat-select
+                  formControlName="countryId"
+                  (selectionChange)="onCountryChange($event.value)"
+                >
+                  <mat-option *ngFor="let c of countries" [value]="c.id"
+                    >{{ c.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error *ngIf="electionCreationForm.get('countryId')?.hasError('required')"
+                  >Country is required</mat-error
+                >
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>State</mat-label>
+                <mat-select
+                  formControlName="stateId"
+                  (selectionChange)="onStateChange($event.value)"
+                >
+                  <mat-option *ngFor="let s of states" [value]="s.id"
+                    >{{ s.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error *ngIf="electionCreationForm.get('stateId')?.hasError('required')"
+                  >State is required</mat-error
+                >
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>City</mat-label>
+                <mat-select formControlName="cityId">
+                  <mat-option *ngFor="let ct of cities" [value]="ct.id"
+                    >{{ ct.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error *ngIf="electionCreationForm.get('cityId')?.hasError('required')"
+                  >City is required</mat-error
+                >
+              </mat-form-field>
+            </div>
+        
+        <div class="form-row">
+           <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Country</mat-label>
+                <mat-select
+                  formControlName="officer"
+                  (selectionChange)="onOfficerChange($event.value)"
+                >
+                  <mat-option *ngFor="let c of officerList" [value]="c.id"
+                    >{{ c.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error *ngIf="electionCreationForm.get('officer')?.hasError('required')"
+                  >Officer is required</mat-error
+                >
+              </mat-form-field>
+        </div>
+   
+      </form>
+    </mat-card-content>
+
+    <!-- Card Actions -->
+    <mat-card-actions>
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="onClear()"
+        [disabled]="loading"
+      >
+        <mat-icon>clear</mat-icon>
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        (click)="onSubmit()"
+        [disabled]="electionCreationForm.invalid || loading"
+      >
+        <mat-icon *ngIf="!loading">save</mat-icon>
+        <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+        {{ loading ? 'Registering...' : 'Register' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
