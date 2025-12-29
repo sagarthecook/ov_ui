@@ -54,13 +54,10 @@ export class PartyCreation implements OnInit {
   partyCreationForm: FormGroup;
   loading = false;
 
-  constructor( private formBuilder: FormBuilder,private partyService: PartyService) {
+  constructor( private formBuilder: FormBuilder, private partyService: PartyService) {
     this.successMessage = '';
     this.errorMessage = '';
     this.partyCreationForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      presidentName: ['', Validators.required],
-      logoText: ['', Validators.required],
     });
   }
 
