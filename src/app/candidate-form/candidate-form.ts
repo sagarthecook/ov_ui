@@ -62,7 +62,8 @@ partyList: any;
       middleName: ['', Validators.required],
       lastName: ['', Validators.required],
       occupation: ['', Validators.required],
-      elections: ['', Validators.required],
+      election: ['', Validators.required],
+      party: ['', Validators.required],
     });
   }
 
