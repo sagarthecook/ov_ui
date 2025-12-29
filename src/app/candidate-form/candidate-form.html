@@ -1,0 +1,152 @@
+<div class="candidate-form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Candidate Registration</mat-card-title>
+      <mat-card-subtitle>Create your account</mat-card-subtitle>
+    </mat-card-header>
+
+     <mat-card-content>
+      <!-- Success Message -->
+      <div *ngIf="successMessage" class="success-message">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ successMessage }}</span>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="error-message">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+        <!-- Name Fields Row -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>First Name</mat-label>
+            <input
+              matInput
+              formControlName="firstName"
+              placeholder="Enter first name"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error
+              *ngIf="registrationForm.get('firstName')?.hasError('required')"
+            >
+              First Name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Middle Name</mat-label>
+            <input
+              matInput
+              formControlName="middleName"
+              placeholder="Enter middle name"
+              [disabled]="loading"
+            />
+            <mat-error
+              *ngIf="registrationForm.get('middleName')?.hasError('required')"
+            >
+              Middle Name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Last Name</mat-label>
+            <input
+              matInput
+              formControlName="lastName"
+              placeholder="Enter last name"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error
+              *ngIf="registrationForm.get('lastName')?.hasError('required')"
+            >
+              Last Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Occupation Field -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Occupation</mat-label>
+          <input
+            matInput
+            formControlName="occupation"
+            placeholder="Enter occupation"
+            [disabled]="loading"
+          />
+          <mat-icon matPrefix>work</mat-icon>
+          <mat-error
+            *ngIf="registrationForm.get('occupation')?.hasError('required')"
+          >
+            Occupation is required
+          </mat-error>
+        </mat-form-field>
+
+      
+        <div class="form-row">
+          <!-- Election Dropdown Field -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Election</mat-label>
+            <mat-select
+              formControlName="election"
+              (selectionChange)="($event.value)"
+              [disabled]="loading"
+            >
+              <mat-option *ngFor="let e of electionList" [value]="e.id">
+                {{ e.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="registrationForm.get('election')?.hasError('required')">
+              Election is required
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Party Dropdown Field -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Party</mat-label>
+            <mat-select
+              formControlName="party"
+              (selectionChange)="($event.value)"
+              [disabled]="loading"
+            >
+              <mat-option *ngFor="let p of partyList" [value]="p.id">
+                {{ p.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="registrationForm.get('party')?.hasError('required')">
+              Party is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+    </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
+<mat-card-actions>
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="onclick()"
+        [disabled]="loading"
+      >
+        <mat-icon>clear</mat-icon>
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        (click)="onSubmit()"
+        [disabled]="registrationForm.invalid || loading"
+      >
+        <mat-icon *ngIf="!loading">save</mat-icon>
+        <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+        {{ loading ? 'Registering...' : 'Register' }}
+      </button>
+    </mat-card-actions>
+

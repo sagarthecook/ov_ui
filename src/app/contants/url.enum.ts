@@ -13,5 +13,7 @@ export enum URLConstants {
     GET_MENU_ITEMS = '/v1/menu/user',
     GET_VOTER_DETAILS_LIST = '/v1/user_detail/findbyStatus?status=Pending&orderBy=created_date&order=desc',
     GET_USER_DETAILS_BY_STATUS = '/v1/user_detail/findbyStatus',
-    GET_OFFICERS = '/v1/user/getAllUsersByRole/2' // assuming role ID 2 is for officers
+    GET_OFFICERS = '/v1/user/getAllUsersByRole/2', // assuming role ID 2 is for officers
+    GET_ELECTION = '/v1/election',
+    GET_PARTY = '/v1/party',
 }

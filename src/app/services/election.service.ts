@@ -4,6 +4,7 @@ import { Election } from "../models/election.model";
 import { APIResponse } from "../models/ApiResponse";
 import { URLConstants } from "../contants/url.enum";
 import { Observable } from "rxjs";
+import { DropdownModel } from "../models/dropdown.model";
 
 @Injectable({
     providedIn: 'root'
@@ -24,4 +25,15 @@ export class ElectionService {
         return this.httpClient.patch<APIResponse<any>>(URLConstants.BASE_URL + `/v1/election/status/`+
             electionId, reqBody);
     }
+    
+     public getElections(): Observable<APIResponse<DropdownModel[]>> {
+        return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_ELECTION);
+    
+}
+
+
+     public getparty(): Observable<APIResponse<DropdownModel[]>> {
+        return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_PARTY);
+        
+}
 }
