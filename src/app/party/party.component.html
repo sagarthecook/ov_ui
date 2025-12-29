@@ -1,0 +1,88 @@
+<div class="userregistration-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Party Registration</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="successMessage" class="success-message">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ successMessage }}</span>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <form [formGroup]="partyForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Party Name</mat-label>
+            <input
+              matInput
+              formControlName="partyName"
+              placeholder="Enter Party name"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>group</mat-icon>
+            <mat-error *ngIf="partyForm.get('partyName')?.hasError('required')">
+              Party Name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Party President</mat-label>
+            <input
+              matInput
+              formControlName="PartyPresident"
+              placeholder="Enter Party President"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>emoji_events</mat-icon>
+            <mat-error
+              *ngIf="partyForm.get('PartyPresident')?.hasError('required')"
+            >
+              Party President is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>logo Text</mat-label>
+            <input
+              matInput
+              formControlName="logoText"
+              placeholder="Enter logo Text"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>festival</mat-icon>
+            <mat-error *ngIf="partyForm.get('logoText')?.hasError('required')">
+              logo Text is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="onClear()"
+        [disabled]="loading"
+      >
+        <mat-icon>clear</mat-icon>
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="partyForm.invalid || loading"
+      >
+        Submit
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
