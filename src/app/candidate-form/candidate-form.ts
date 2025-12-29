@@ -69,6 +69,11 @@ partyList: any;
 
   ngOnInit(): void {
     this.loadElections();
+    this.loadparty();
+  }
+
+  loadParties(): void {
+    // ASH and SAM pls add code
   }
 
   loadElections(): void {

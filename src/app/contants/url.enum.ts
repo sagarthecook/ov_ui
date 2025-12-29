@@ -14,7 +14,8 @@ export enum URLConstants {
     GET_VOTER_DETAILS_LIST = '/v1/user_detail/findbyStatus?status=Pending&orderBy=created_date&order=desc',
     GET_USER_DETAILS_BY_STATUS = '/v1/user_detail/findbyStatus',
     GET_OFFICERS = '/v1/user/getAllUsersByRole/2', // assuming role ID 2 is for officers
-    GET_ELECTION = '/v1/election',
+    GET_ELECTION = '/v1/election/approved',
     GET_PARTY = '/v1/party',
-    SAVE_PARTY = '/v1/party'
+    SAVE_PARTY = '/v1/party',
+    SAVE_CANDIDATE = '/v1/candidate'
 }
