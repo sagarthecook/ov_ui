@@ -16,4 +16,5 @@ export enum URLConstants {
     GET_OFFICERS = '/v1/user/getAllUsersByRole/2', // assuming role ID 2 is for officers
     GET_ELECTION = '/v1/election',
     GET_PARTY = '/v1/party',
+    SAVE_PARTY = '/v1/party'
 }
