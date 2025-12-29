@@ -69,7 +69,7 @@ partyList: any;
 
   ngOnInit(): void {
     this.loadElections();
-    this.loadparty();
+    this.loadParties();
   }
 
   loadParties(): void {
