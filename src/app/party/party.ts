@@ -1,33 +1,3 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-// Angular Material modules
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatError } from '@angular/material/form-field';
-
-@Component({
-  selector: 'app-party',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-
-    // Material
-    MatCardModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule
-  ],
-  templateUrl: './party.component.html',
-  styleUrls: ['./party.component.scss'],
-=======
 import { Component, OnInit } from '@angular/core';
 import { IfDirective } from '../shared/if.directive';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -77,7 +47,6 @@ import { Party } from '../models/party.model';
   ],
   templateUrl: './party.html',
   styleUrl: './party.scss',
->>>>>>> 98397710cb715e8d374d188f68c425e053b2286e
 })
 export class PartyCreation implements OnInit {
   successMessage: string;
@@ -85,35 +54,6 @@ export class PartyCreation implements OnInit {
   partyCreationForm: FormGroup;
   loading = false;
 
-<<<<<<< HEAD
-  partyForm: FormGroup;
-  successMessage = '';
-  errorMessage = '';
-  loading = false;
-
-  constructor(private fb: FormBuilder) {
-    // initialize the form
-    this.partyForm = this.fb.group({
-      partyName: ['', Validators.required],
-      PartyPresident: ['', Validators.required]
-    });
-  }
-
-  onSubmit() {
-    if (this.partyForm.valid) {
-      console.log(this.partyForm.value);
-      this.successMessage = 'Submitted successfully!';
-    } else {
-      this.errorMessage = 'Please fill all required fields';
-    }
-  }
-
-  onClear() {
-    this.partyForm.reset();
-    this.errorMessage = '';
-    this.successMessage = '';
-  }
-=======
   constructor( private formBuilder: FormBuilder, private partyService: PartyService) {
     this.successMessage = '';
     this.errorMessage = '';
@@ -152,6 +92,10 @@ export class PartyCreation implements OnInit {
           this.errorMessage =
             response.message || 'Failed to create party. Please try again.';
         }
+ // optionally auto-clear success message after 3 seconds
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
       },
       error: (error) => {
         this.loading = false;
@@ -162,14 +106,5 @@ export class PartyCreation implements OnInit {
 
   onClear() {
     this.partyCreationForm.reset();
->>>>>>> 98397710cb715e8d374d188f68c425e053b2286e
 }
 }
-
-
-
-
-
-
-
-
