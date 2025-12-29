@@ -15,7 +15,8 @@ export const routes: Routes = [
       { path: 'voter_verification', loadComponent: () => import('./voter-verification/voter-verification').then(m => m.VoterVerification) },
       {path: 'create_election', loadComponent: () => import('./create-election/create-election').then(m => m.CreateElection) },
       { path: 'election_verification', loadComponent: () => import('./election-verification/election-verification').then(m => m.ElectionVerification) },
-      { path: 'party', loadComponent: () => import('./party/party').then(m => m.Party) }
+      {path: 'candidate_form', loadComponent: () => import('./candidate-form/candidate-form').then(m => m.CandidateForm) },
+      { path: 'party', loadComponent: () => import('./party/party').then(m => m.PartyCreation) }
     ]
   },
   {path: '**', redirectTo: ''}  // Wildcard route to catch undefined paths and redirect to login
