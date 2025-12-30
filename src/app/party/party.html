@@ -28,7 +28,7 @@
                   placeholder="Enter party name"
                   [disabled]="loading"
                 />
-                <mat-icon matPrefix>person</mat-icon>
+                <mat-icon matPrefix>groups</mat-icon>
                 <mat-error
                   *ngIf="partyCreationForm.get('Name')?.hasError('required')"
                 >
@@ -45,7 +45,7 @@
                   placeholder="Enter President name"
                   [disabled]="loading"
                 />
-                <mat-icon matPrefix>person</mat-icon>
+               <mat-icon matPrefix>assignment_ind</mat-icon>
                 <mat-error
                   *ngIf="partyCreationForm.get('presidentName')?.hasError('required')"
                 >
@@ -65,7 +65,7 @@
                       placeholder="Enter Party Logo"
                       [disabled]="loading"
                     />
-                    <mat-icon matPrefix>person</mat-icon>
+                    <mat-icon matPrefix>token</mat-icon>
                     <mat-error
                       *ngIf="partyCreationForm.get('logoText')?.hasError('required')">
                         Party Logo is required

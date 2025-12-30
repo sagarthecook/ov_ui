@@ -63,8 +63,8 @@ export class PartyCreation implements OnInit {
 
   ngOnInit() {
     this.partyCreationForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      presidentName: ['', Validators.required],
+      name: ['', Validators.required,],
+      presidentName: ['', Validators.required ,  Validators.pattern("^[a-zA-Z]*$") ,],
       logoText: ['', Validators.required],
     });
   }
@@ -87,6 +87,9 @@ export class PartyCreation implements OnInit {
         this.loading = false;
         if (response.success) {
           this.successMessage = 'Party created successfully.';
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 3000);
           this.partyCreationForm.reset();
         } else {
           this.errorMessage =
@@ -96,6 +99,9 @@ export class PartyCreation implements OnInit {
       error: (error) => {
         this.loading = false;
         this.errorMessage = 'An error occurred. Please try again.';
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 3000);
       },
     });
   }

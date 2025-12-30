@@ -22,6 +22,7 @@ export class Election {
   electionName: string;
   electionDate: string;
   resultDate: string;
+  formEndDate: string;
   country: Country;
   state: State;
   city: City;
@@ -31,6 +32,7 @@ export class Election {
     electionName: string = '',
     electionDate: string = '',
     resultDate: string = '',
+    formEndDate: string = '',
     country: Country = { id: 0 },
     state: State = { id: 0 },
     city: City = { id: 0 },
@@ -39,6 +41,7 @@ export class Election {
     this.electionName = electionName;
     this.electionDate = electionDate;
     this.resultDate = resultDate;
+    this.formEndDate = formEndDate;
     this.country = country;
     this.state = state;
     this.city = city;

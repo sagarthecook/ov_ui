@@ -85,6 +85,10 @@ partyList: any;
   }
 
   loadParties(): void {
+    // ASH and SAM pls add code
+  }
+
+  loadParties(): void {
     this.successMessage = null;
     this.partyService.getParty().subscribe({
       next: (response: APIResponse<DropdownModel[]>) => {
