@@ -12,7 +12,7 @@ export class CandidateService {
   constructor(private httpClient: HttpClient) {}
 
   public saveCandidate(candidateData: Candidate): Observable<APIResponse<any>> {
-    return this.httpClient.post<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.create_CANDIDATE,candidateData
+    return this.httpClient.post<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.CREATE_CANDIDATE, candidateData
     );
   }
 }

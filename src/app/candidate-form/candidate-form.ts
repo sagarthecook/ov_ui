@@ -54,10 +54,10 @@ export class CandidateForm implements OnInit {
 
   electionList: DropdownModel[] = [];
 partyList: any;
-   incomeOptions: { id: number; name: string }[] = [
-    { id: 1, name: '0-5 lakh' },
-    { id: 2, name: '5-10 lakh' },
-    { id: 3, name: 'More than 10 lakh' },
+   incomeOptions: { id: string; name: string }[] = [
+    { id: '0-5 lakh', name: '0-5 lakh' },
+    { id: '5-10 lakh', name: '5-10 lakh' },
+    { id: 'More than 10 lakh', name: 'More than 10 lakh' },
   ];
 
   constructor(
