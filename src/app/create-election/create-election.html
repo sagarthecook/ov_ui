@@ -119,7 +119,7 @@
         
         <div class="form-row">
            <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Country</mat-label>
+                <mat-label>Officer Name</mat-label>
                 <mat-select
                   formControlName="officer"
                   (selectionChange)="onOfficerChange($event.value)"
@@ -132,6 +132,25 @@
                   >Officer is required</mat-error
                 >
               </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Form End Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="formEndDatePicker"
+                  formControlName="formEndDate"
+                  placeholder="Select Form End date"
+                  [min]="minDate"
+                  [disabled]="loading"
+                />
+                <mat-icon matPrefix>event</mat-icon>
+                <mat-datepicker-toggle matIconSuffix [for]="formEndDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #formEndDatePicker></mat-datepicker>
+                <mat-error *ngIf="electionCreationForm.get('formEndDate')?.hasError('required')">
+                  Form End Date is required
+                </mat-error>
+              </mat-form-field>
+
+              
         </div>
    
       </form>
