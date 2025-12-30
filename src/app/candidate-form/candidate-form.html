@@ -125,11 +125,7 @@
         </div>
     </form>
     </mat-card-content>
-  </mat-card>
-</div>
-
-
-<mat-card-actions>
+    <mat-card-actions>
       <button
         mat-stroked-button
         type="button"
@@ -143,11 +139,15 @@
         color="primary"
         type="submit"
         (click)="onSubmit()"
-        [disabled]="registrationForm.invalid || loading"
-      >
+        [disabled]="registrationForm.invalid || loading">
         <mat-icon *ngIf="!loading">save</mat-icon>
         <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
         {{ loading ? 'Registering...' : 'Register' }}
       </button>
     </mat-card-actions>
+
+  </mat-card>
+</div>
+
+
 
