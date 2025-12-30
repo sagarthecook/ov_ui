@@ -1,8 +1,7 @@
 <div class="candidate-form-container">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Candidate Registration</mat-card-title>
-      <mat-card-subtitle>Create your account</mat-card-subtitle>
+      <mat-card-title>Candidate Election Form</mat-card-title>
     </mat-card-header>
 
      <mat-card-content>
@@ -26,7 +25,6 @@
               matInput
               formControlName="firstName"
               placeholder="Enter first name"
-              [disabled]="loading"
             />
             <mat-icon matPrefix>person</mat-icon>
             <mat-error
@@ -42,7 +40,6 @@
               matInput
               formControlName="middleName"
               placeholder="Enter middle name"
-              [disabled]="loading"
             />
             <mat-error
               *ngIf="registrationForm.get('middleName')?.hasError('required')"
@@ -57,7 +54,6 @@
               matInput
               formControlName="lastName"
               placeholder="Enter last name"
-              [disabled]="loading"
             />
             <mat-icon matPrefix>person</mat-icon>
             <mat-error
@@ -68,22 +64,30 @@
           </mat-form-field>
         </div>
 
-        <!-- Occupation Field -->
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Occupation</mat-label>
-          <input
-            matInput
-            formControlName="occupation"
-            placeholder="Enter occupation"
-            [disabled]="loading"
-          />
-          <mat-icon matPrefix>work</mat-icon>
-          <mat-error
-            *ngIf="registrationForm.get('occupation')?.hasError('required')"
-          >
-            Occupation is required
-          </mat-error>
-        </mat-form-field>
+        <!-- Occupation and Income Fields Row -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Occupation</mat-label>
+            <input
+              matInput
+              formControlName="occupation"
+              placeholder="Enter occupation"
+            />
+            <mat-icon matPrefix>work</mat-icon>
+            <mat-error *ngIf="registrationForm.get('occupation')?.hasError('required')">
+              Occupation is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Income Range</mat-label>
+            <mat-select formControlName="income">
+              <mat-option *ngFor="let income of incomeOptions" [value]="income.id">
+                {{ income.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
         <!-- Election and Party Dropdowns Row -->
         <div class="form-row">
@@ -93,7 +97,6 @@
             <mat-select
               formControlName="election"
               (selectionChange)="($event.value)"
-              [disabled]="loading"
             >
               <mat-option *ngFor="let e of electionList" [value]="e.id">
                 {{ e.name }}
@@ -110,7 +113,6 @@
             <mat-select
               formControlName="party"
               (selectionChange)="($event.value)"
-              [disabled]="loading"
             >
               <mat-option *ngFor="let p of partyList" [value]="p.id">
                 {{ p.name }}
@@ -131,8 +133,7 @@
       <button
         mat-stroked-button
         type="button"
-        (click)="onclick()"
-        [disabled]="loading"
+        (click)="onClear()"
       >
         <mat-icon>clear</mat-icon>
         Cancel
