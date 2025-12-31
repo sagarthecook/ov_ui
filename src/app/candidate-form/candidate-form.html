@@ -16,7 +16,156 @@
         <mat-icon>error</mat-icon>
         <span>{{ errorMessage }}</span>
       </div>
+      
       <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+             <!-- Address Details Section -->
+        <div class="form-row">
+          <div style="border: 2px solid #ddd; padding: 16px; border-radius: 4px; width: 100%;">
+            <h3 style="margin-top: 0; margin-bottom: 16px; color: #333;">Ward / Locality Details</h3>
+            <div formGroupName="address">
+              <!-- Country, State, City Row -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Country</mat-label>
+                  <mat-select
+                    formControlName="countryId"
+                    (selectionChange)="onCountryChange($event.value)"
+                  >
+                    <mat-option *ngFor="let c of countries" [value]="c.id">
+                      {{ c.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon matPrefix>public</mat-icon>
+                  <mat-error *ngIf="address?.get('countryId')?.hasError('required')">
+                    Country is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>State</mat-label>
+                  <mat-select
+                    formControlName="stateId"
+                    (selectionChange)="onStateChange($event.value)"
+                  >
+                    <mat-option *ngFor="let s of states" [value]="s.id">
+                      {{ s.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon matPrefix>location_on</mat-icon>
+                  <mat-error *ngIf="address?.get('stateId')?.hasError('required')">
+                    State is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>City</mat-label>
+                  <mat-select formControlName="cityId">
+                    <mat-option *ngFor="let ct of cities" [value]="ct.id">
+                      {{ ct.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon matPrefix>location_city</mat-icon>
+                  <mat-error *ngIf="address?.get('cityId')?.hasError('required')">
+                    City is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- Street and Zip Code Row -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Street Address</mat-label>
+                  <input
+                    matInput
+                    formControlName="street"
+                    placeholder="Enter street address / locality"
+                  />
+                  <mat-icon matPrefix>home</mat-icon>
+                  <mat-error *ngIf="address?.get('street')?.hasError('required')">
+                    Street address is required
+                  </mat-error>
+                  <mat-error *ngIf="address?.get('street')?.hasError('maxlength')">
+                    Street address must be less than 200 characters
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Zip Code</mat-label>
+                  <input
+                    matInput
+                    formControlName="zipCode"
+                    placeholder="Enter 6-digit zip code"
+                  />
+                  <mat-icon matPrefix>markunread_mailbox</mat-icon>
+                  <mat-error *ngIf="address?.get('zipCode')?.hasError('required')">
+                    Zip code is required
+                  </mat-error>
+                  <mat-error *ngIf="address?.get('zipCode')?.hasError('pattern')">
+                    Enter a valid 6-digit zip code
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Save Address Button -->
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="saveAddress()"
+              [disabled]="address?.invalid || addressButtonLoading"
+              style="margin-top: 16px;"
+            >
+              <mat-icon *ngIf="!addressButtonLoading">save</mat-icon>
+              <mat-spinner diameter="20" *ngIf="addressButtonLoading"></mat-spinner>
+              {{ addressButtonLoading ? 'Saving...' : 'Save Address' }}
+            </button>
+
+            <!-- Address Grid/Table -->
+            <div style="margin-top: 20px;" *ngIf="savedAddresses?.length">
+              <h4 style="margin-bottom: 10px; color: #333;">Saved Addresses</h4>
+              <table mat-table [dataSource]="savedAddresses" class="mat-elevation-z8" style="width: 100%;">
+                <!-- Index Column -->
+                <ng-container matColumnDef="index">
+                  <th mat-header-cell *matHeaderCellDef>#</th>
+                  <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+                </ng-container>
+
+                <!-- Country Column -->
+                <ng-container matColumnDef="country">
+                  <th mat-header-cell *matHeaderCellDef>Country</th>
+                  <td mat-cell *matCellDef="let element">{{ element.countryName }}</td>
+                </ng-container>
+
+                <!-- State Column -->
+                <ng-container matColumnDef="state">
+                  <th mat-header-cell *matHeaderCellDef>State</th>
+                  <td mat-cell *matCellDef="let element">{{ element.stateName }}</td>
+                </ng-container>
+
+                <!-- City Column -->
+                <ng-container matColumnDef="city">
+                  <th mat-header-cell *matHeaderCellDef>City</th>
+                  <td mat-cell *matCellDef="let element">{{ element.cityName }}</td>
+                </ng-container>
+
+                <!-- Street Column -->
+                <ng-container matColumnDef="street">
+                  <th mat-header-cell *matHeaderCellDef>Street</th>
+                  <td mat-cell *matCellDef="let element">{{ element.street }}</td>
+                </ng-container>
+
+                <!-- Zip Column -->
+                <ng-container matColumnDef="zip">
+                  <th mat-header-cell *matHeaderCellDef>Zip Code</th>
+                  <td mat-cell *matCellDef="let element">{{ element.zipCode }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+            </div>
+          </div>
+        </div>
         <!-- Name Fields Row -->
         <div class="form-row">
           <mat-form-field appearance="outline" class="form-field">
@@ -41,11 +190,6 @@
               formControlName="middleName"
               placeholder="Enter middle name"
             />
-            <mat-error
-              *ngIf="registrationForm.get('middleName')?.hasError('required')"
-            >
-              Middle Name is required
-            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="form-field">
@@ -66,6 +210,23 @@
 
         <!-- Occupation and Income Fields Row -->
         <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Date of Birth</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="dob"
+              placeholder="Select your date of birth"
+              [max]="maxDate"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>cake</mat-icon>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="registrationForm.get('dob')?.hasError('required')">
+              Date of Birth is required & You must be at least 18 years old
+            </mat-error>
+          </mat-form-field>
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Occupation</mat-label>
             <input
@@ -86,6 +247,9 @@
                 {{ income.name }}
               </mat-option>
             </mat-select>
+            <mat-error *ngIf="registrationForm.get('income')?.hasError('required')">
+              Income range is required
+            </mat-error>
           </mat-form-field>
         </div>
 
@@ -123,6 +287,8 @@
             </mat-error>
           </mat-form-field>
         </div>
+
+   
     </form>
     </mat-card-content>
     <mat-card-actions>
