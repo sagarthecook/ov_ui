@@ -17,5 +17,5 @@ export enum URLConstants {
     GET_ELECTION = '/v1/election/approved',
     GET_PARTY = '/v1/party',
     SAVE_PARTY = '/v1/party',
-    SAVE_CANDIDATE = '/v1/candidate'
+    CREATE_CANDIDATE = '/v1/candidate_form'
 }

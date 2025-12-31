@@ -155,6 +155,8 @@ export class CreateElection implements OnInit {
         ],
         officer: [ '',[Validators.required],
         ],
+        formEndDate: [ '',[Validators.required]
+        ]
       });
 
       this.loadCountries();
@@ -198,11 +200,13 @@ export class CreateElection implements OnInit {
       formData.electionName,
       formData.electionDate,
       formData.resultDate,
+      formData.formEndDate,
       { id: formData.countryId },
       { id: formData.stateId },
       { id: formData.cityId },
       { id: formData.officer }
     );
+    
 
     this.electionService.createElection(electionData).subscribe(
       (response: APIResponse<any>) => {
