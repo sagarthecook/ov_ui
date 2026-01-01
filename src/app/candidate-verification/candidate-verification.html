@@ -1,1 +1,125 @@
-<p>candidate-verification works!</p>
+<div class="candidate-verification-container">
+  <mat-card class="table-card">
+    <mat-card-title>Candidate Verification</mat-card-title>
+    <div class="table-container">
+      @if (dataSource.data.length == 0) {
+        <div>
+          <p style="color: red; font-size:30px">No candidate registrations found.</p>
+        </div>
+      }
+       <!-- Search and Filter Section -->
+      <div class="filter-section" [formGroup]="filterForm">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search Candidates</mat-label>
+          <input matInput formControlName="searchTerm" placeholder="Search by name, email, occupation, or party">
+          <mat-icon matPrefix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="status-filter">
+          <mat-label>Filter by Status</mat-label>
+          <mat-select formControlName="status" (selectionChange)="filterByStatus($event.value)">
+            <mat-option value="">All Status</mat-option>
+            <mat-option value="Pending">Pending</mat-option>
+            <mat-option value="Approved">Approved</mat-option>
+            <mat-option value="Rejected">Rejected</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button color="accent" (click)="clearFilters()" class="clear-btn">
+          <mat-icon>clear</mat-icon>
+          Clear Filters
+        </button>
+      </div>
+      <table mat-table [dataSource]="dataSource" matSort>
+        
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.id }}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.firstName }} {{ candidate.middleName }} {{ candidate.lastName }}</td>
+        </ng-container>
+
+        <!-- Email Column -->
+        <ng-container matColumnDef="emailId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.emailId }}</td>
+        </ng-container>
+
+        <!-- Occupation Column -->
+        <ng-container matColumnDef="occupation">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Occupation</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.occupation }}</td>
+        </ng-container>
+
+        <!-- Income Column -->
+        <ng-container matColumnDef="income">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Income Range</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.income }}</td>
+        </ng-container>
+
+        <!-- Party Column -->
+        <ng-container matColumnDef="party">
+          <th mat-header-cell *matHeaderCellDef>Party</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.party || 'Independent' }}</td>
+        </ng-container>
+
+        <!-- Election Column -->
+        <ng-container matColumnDef="election">
+          <th mat-header-cell *matHeaderCellDef>Election</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.election || 'N/A' }}</td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let candidate">
+            <mat-chip [class]="'status-' + candidate.status.toLowerCase()">
+              {{ candidate.status }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Note For Status Column -->
+        <ng-container matColumnDef="noteForStatus">
+          <th mat-header-cell *matHeaderCellDef>Notes</th>
+          <td mat-cell *matCellDef="let candidate">{{ candidate.noteForStatus || '-' }}</td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let candidate">
+            <div class="action-buttons">
+              <button mat-icon-button 
+                      color="primary"
+                      [disabled]="candidate.status === 'Approved' || loading"
+                      (click)="approveCandidate(candidate)"
+                      matTooltip="Approve"
+                     >
+                <mat-icon>check_circle</mat-icon>
+              </button>
+              <button mat-icon-button 
+                      color="warn"
+                      [disabled]="candidate.status === 'Rejected' || loading"
+                      (click)="rejectCandidate(candidate)"
+                      matTooltip="Reject"
+                     >
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card>
+</div>
