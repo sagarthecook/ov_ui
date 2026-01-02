@@ -11,8 +11,7 @@
   }
 
   mat-card-header {
-    margin-bottom: 20px;
-
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -28,20 +27,47 @@
 .filter-section {
   display: flex;
   gap: 16px;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  flex-wrap: nowrap;
+
+  .status-filter {
+    min-width: 180px;
+    flex-shrink: 0;
+  }
 
   .search-field {
     flex: 1;
     min-width: 300px;
   }
 
-  .status-filter {
-    min-width: 180px;
+  .clear-btn {
+    height: 56px;
+    min-width: 80px;
+    flex-shrink: 0;
+    align-self: stretch;
   }
 
-  .clear-btn {
-    height: 40px;
+  // Ensure all form fields have consistent height
+  mat-form-field {
+    .mat-mdc-form-field-wrapper {
+      height: 56px;
+    }
+  }
+
+  // Media query for responsive design
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    
+    .status-filter,
+    .search-field {
+      min-width: 100%;
+    }
+    
+    .clear-btn {
+      width: 100%;
+      height: 48px;
+    }
   }
 }
 
