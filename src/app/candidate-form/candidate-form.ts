@@ -108,10 +108,6 @@ export class CandidateForm implements OnInit {
         zipCode: [''], // Remove required for testing
       }),
     });
-    
-    // Debug: Log form structure after initialization
-    console.log('Form initialized:', this.registrationForm.value);
-    console.log('Address form group:', this.registrationForm.get('address')?.value);
   }
 
   ngOnInit(): void {
@@ -121,8 +117,6 @@ export class CandidateForm implements OnInit {
       todayDate.getMonth(),
       todayDate.getDate()
     );
-    console.log('CandidateForm ngOnInit called');
-    console.log('Initial address form value:', this.registrationForm.get('address')?.value);
     this.loadElections();
     this.loadParties();
     this.loadCountries();
@@ -165,25 +159,18 @@ export class CandidateForm implements OnInit {
   // Getter for address form group
   get address() {
     const addressFormGroup = this.registrationForm.get('address');
-    console.log('Address form group:', addressFormGroup?.value);
     return addressFormGroup;
   }
 
   // Load countries
   loadCountries(): void {
-    console.log('Loading countries...');
     this.userService.getCountries().subscribe({
       next: (response: APIResponse<DropdownModel[]>) => {
-        console.log('Countries API response:', response);
         if (response && response.data) {
           this.countries = response.data;
-          console.log('Countries loaded:', this.countries.length, this.countries);
-        } else {
-          console.log('No countries data in response');
         }
       },
       error: (error) => {
-        console.error('Error loading countries:', error);
         this.errorMessage = 'Failed to load countries.';
         setTimeout(() => {
           this.errorMessage = null;
@@ -194,7 +181,6 @@ export class CandidateForm implements OnInit {
 
   // Handle country selection change
   onCountryChange(countryId: string): void {
-    console.log('onCountryChange called with:', countryId);
     // Clear state and city selections
     this.address?.get('stateId')?.setValue('');
     this.address?.get('cityId')?.setValue('');
@@ -202,19 +188,13 @@ export class CandidateForm implements OnInit {
     this.cities = [];
 
     if (countryId) {
-      console.log('Loading states for country:', countryId);
       this.userService.getStates(countryId).subscribe({
         next: (response: APIResponse<DropdownModel[]>) => {
-          console.log('States API response:', response);
           if (response && response.data) {
             this.states = response.data;
-            console.log('States loaded:', this.states.length, this.states);
-          } else {
-            console.log('No states data in response');
           }
         },
         error: (error) => {
-          console.error('Error loading states:', error);
           this.errorMessage = 'Failed to load states.';
           setTimeout(() => {
             this.errorMessage = null;
@@ -226,25 +206,18 @@ export class CandidateForm implements OnInit {
 
   // Handle state selection change
   onStateChange(stateId: string): void {
-    console.log('onStateChange called with:', stateId);
     // Clear city selection
     this.address?.get('cityId')?.setValue('');
     this.cities = [];
 
     if (stateId) {
-      console.log('Loading cities for state:', stateId);
       this.userService.getCities(stateId).subscribe({
         next: (response: APIResponse<DropdownModel[]>) => {
-          console.log('Cities API response:', response);
           if (response && response.data) {
             this.cities = response.data;
-            console.log('Cities loaded:', this.cities.length, this.cities);
-          } else {
-            console.log('No cities data in response');
           }
         },
         error: (error) => {
-          console.error('Error loading cities:', error);
           this.errorMessage = 'Failed to load cities.';
           setTimeout(() => {
             this.errorMessage = null;
@@ -368,6 +341,46 @@ export class CandidateForm implements OnInit {
     });
   }
   
+  onElectionChange(electionId: number): void {
+    this.electionService.getElectionById(electionId).subscribe({
+      next: (response: APIResponse<any>) => {
+        const countryValue = response.data.country;
+         const stateValue = response.data.state;
+         const cityValue = response.data.city;
+        // Check if countries are loaded
+        if (this.countries && this.countries.length > 0) {
+          // Verify the country value exists in the dropdown options
+          const countryExists = this.countries.find(c => c.id === countryValue);
+          
+          if (countryExists) {
+            // Set the country value in the form control
+            this.address?.get('countryId')?.setValue(countryValue);
+            
+            // Trigger country change to load states
+            this.onCountryChange(countryValue);
+            this.address?.get('stateId')?.setValue(stateValue);
+            this.onStateChange(stateValue);
+            this.address?.get('cityId')?.setValue(cityValue);
+          }
+        } else {
+          // Wait a bit for countries to load, then try again
+          setTimeout(() => {
+            if (this.countries && this.countries.length > 0) {
+              const countryExists = this.countries.find(c => c.id === countryValue);
+              if (countryExists) {
+                this.address?.get('countryId')?.setValue(countryValue);
+                this.onCountryChange(countryValue);
+              }
+            }
+          }, 500);
+        }
+      },      
+      error: (error) => {
+        // Handle error silently or show user message
+      },
+    });
+  }
+
   // Debug helper methods
   getFormControlNames(): string[] {
     return Object.keys(this.registrationForm.controls);

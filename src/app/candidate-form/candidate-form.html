@@ -18,6 +18,40 @@
       </div>
       
       <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+        <!-- Election and Party Dropdowns Row -->
+        <div class="form-row">
+          <!-- Election Dropdown Field -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Election</mat-label>
+            <mat-select
+              formControlName="election"
+              (selectionChange)="onElectionChange($event.value)">
+              <mat-option *ngFor="let e of electionList" [value]="e.id">
+                {{ e.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="registrationForm.get('election')?.hasError('required')">
+              Election is required
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Party Dropdown Field -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Party</mat-label>
+            <mat-select
+              formControlName="party"
+              (selectionChange)="($event.value)"
+            >
+              <mat-option *ngFor="let p of partyList" [value]="p.id">
+                {{ p.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="registrationForm.get('party')?.hasError('required')">
+              Party is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
              <!-- Address Details Section -->
         <div class="form-row">
           <div style="border: 2px solid #ddd; padding: 16px; border-radius: 4px; width: 100%;">
@@ -27,9 +61,10 @@
               <div class="form-row">
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Country</mat-label>
-                  <mat-select
-                    formControlName="countryId"
-                    (selectionChange)="onCountryChange($event.value)"
+                  <mat-select []
+                    formControlName="countryId"   
+                    [disabled]="true"                   
+                     (selectionChange)="onCountryChange($event.value)"
                   >
                     <mat-option *ngFor="let c of countries" [value]="c.id">
                       {{ c.name }}
@@ -40,11 +75,12 @@
                     Country is required
                   </mat-error>
                 </mat-form-field>
-
+                
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>State</mat-label>
                   <mat-select
                     formControlName="stateId"
+                    [disabled]="true"
                     (selectionChange)="onStateChange($event.value)"
                   >
                     <mat-option *ngFor="let s of states" [value]="s.id">
@@ -59,7 +95,7 @@
 
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>City</mat-label>
-                  <mat-select formControlName="cityId">
+                  <mat-select formControlName="cityId" [disabled]="true">
                     <mat-option *ngFor="let ct of cities" [value]="ct.id">
                       {{ ct.name }}
                     </mat-option>
@@ -113,8 +149,7 @@
               type="button"
               (click)="saveAddress()"
               [disabled]="address?.invalid || addressButtonLoading"
-              style="margin-top: 16px;"
-            >
+              style="margin-top: 16px;">
               <mat-icon *ngIf="!addressButtonLoading">save</mat-icon>
               <mat-spinner diameter="20" *ngIf="addressButtonLoading"></mat-spinner>
               {{ addressButtonLoading ? 'Saving...' : 'Save Address' }}
@@ -253,41 +288,7 @@
           </mat-form-field>
         </div>
 
-        <!-- Election and Party Dropdowns Row -->
-        <div class="form-row">
-          <!-- Election Dropdown Field -->
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Election</mat-label>
-            <mat-select
-              formControlName="election"
-              (selectionChange)="($event.value)"
-            >
-              <mat-option *ngFor="let e of electionList" [value]="e.id">
-                {{ e.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="registrationForm.get('election')?.hasError('required')">
-              Election is required
-            </mat-error>
-          </mat-form-field>
-
-          <!-- Party Dropdown Field -->
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Party</mat-label>
-            <mat-select
-              formControlName="party"
-              (selectionChange)="($event.value)"
-            >
-              <mat-option *ngFor="let p of partyList" [value]="p.id">
-                {{ p.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="registrationForm.get('party')?.hasError('required')">
-              Party is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-
+        
    
     </form>
     </mat-card-content>

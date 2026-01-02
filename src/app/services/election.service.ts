@@ -26,11 +26,14 @@ export class ElectionService {
             electionId, reqBody);
     }
     
+    public getElectionById(electionId: number): Observable<APIResponse<Election>> {
+        return this.httpClient.get<APIResponse<Election>>(URLConstants.BASE_URL + `/v1/election/` + electionId);
+    }
+
      public getElections(): Observable<APIResponse<DropdownModel[]>> {
         return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_ELECTION);
     
-}
-
+   }
 
      public getparty(): Observable<APIResponse<DropdownModel[]>> {
         return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_PARTY);
