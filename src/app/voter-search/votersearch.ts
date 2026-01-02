@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { VoterService } from '../services/voter.service';
 import { MatCardHeader, MatCardTitle, MatCard, MatCardModule } from "@angular/material/card";
@@ -48,7 +49,7 @@ export class VoterSearchComponent implements OnInit, OnDestroy {
     'id', 'firstName', 'lastName', 'emailId', 'phoneNumber', 'dateOfBirth', 'aadharNumber', 'status'
   ];
 
-  constructor(private voterService: VoterService) {}
+  constructor(private voterService: VoterService, private router: Router) {}
 
   ngOnInit() {
   }
@@ -77,6 +78,10 @@ export class VoterSearchComponent implements OnInit, OnDestroy {
       console.error('Error fetching voter data:', error);
       this.dataSource = [];
     });
+  }
+
+  onBackToLogin() {
+    this.router.navigate(['/login']);
   }
 
   ngOnDestroy() {
