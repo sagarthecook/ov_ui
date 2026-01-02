@@ -4,10 +4,11 @@ export const routes: Routes = [
   // Lazy loading - LoginComponent loads at root path
   { path: '', loadComponent: () => import('./login/login.component').then(m => m.LoginComponent) },
   // Lazy loading - Home component loads only when navigating to /home
- 
-  {path: 'userregistration', loadComponent: () => import('./userregistration/userregistration').then(m => m.UserRegistration) },  
-  { 
-    path: 'home', 
+
+  {path: 'userregistration', loadComponent: () => import('./userregistration/userregistration').then(m => m.UserRegistration) },
+      {path: 'voter_search', loadComponent: () => import('./voter-search/votersearch').then(m => m.VoterSearchComponent) },
+  {
+    path: 'home',
     loadComponent: () => import('./home/home').then(m => m.Home),
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

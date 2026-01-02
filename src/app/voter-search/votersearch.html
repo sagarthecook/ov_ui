@@ -1,0 +1,70 @@
+<div class="container">
+  <mat-card>
+<mat-card-header>
+  <mat-card-title>Search Voters</mat-card-title>
+</mat-card-header>
+
+
+<mat-card-content>
+  <!-- Search and Filter Section -->
+  <div class="filter-section">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search Voters</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search by phone, email">
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+  </div>
+  <div class="table-container">
+     <div *ngIf="dataSource.length === 0">
+        <p style="color: red; font-size:30px">No voter found.</p>
+     </div>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
+
+  <ng-container matColumnDef="electionId">
+      <th mat-header-cell *matHeaderCellDef>Election ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.electionId }}</td>
+    </ng-container>
+
+    <!-- Full Name -->
+    <ng-container matColumnDef="fullName">
+      <th mat-header-cell *matHeaderCellDef>Full Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.fullName }}</td>
+    </ng-container>
+
+    <!-- Aadhaar -->
+    <ng-container matColumnDef="aadhaar">
+      <th mat-header-cell *matHeaderCellDef>Aadhaar</th>
+      <td mat-cell *matCellDef="let element">{{ element.aadhaar }}</td>
+    </ng-container>
+
+    <!-- Phone -->
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef>Phone</th>
+      <td mat-cell *matCellDef="let element">{{ element.phone }}</td>
+    </ng-container>
+
+    <!-- Email -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+    </ng-container>
+
+    <!-- Status -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">
+        <span class="status" [ngClass]="element.status.toLowerCase()">
+          {{ element.status }}
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+  </div>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

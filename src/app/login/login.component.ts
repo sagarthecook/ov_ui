@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'login',
-  imports: [ 
+  imports: [
      CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -64,9 +64,12 @@ export class LoginComponent implements OnInit {
   }
 
 
-  navigateToUsercreation(): void{ 
+  navigateToUsercreation(): void{
     this.router.navigate(['/userregistration']);
-    
+
+  }
+  navigateTovotersearch(): void{
+    this.router.navigate(['/voter_search']);
   }
 
 
@@ -75,7 +78,7 @@ export class LoginComponent implements OnInit {
     // Login logic here
     this.loginService.login(this.otpForm.value.email, this.loginForm.value.otp).subscribe(
       (response) => {
-        this.successMessage = 'Login successful!';  
+        this.successMessage = 'Login successful!';
         this.errorMessage = '';
         // Further actions on successful login
         this.router.navigate(['/home']);
@@ -87,7 +90,7 @@ export class LoginComponent implements OnInit {
         this.successMessage = '';
         if(errorResponse.error && errorResponse.error.errors && errorResponse.error.errors.length > 0) {
           this.errorMessage = errorResponse.error.errors[0];
-         
+
         }
       }
     );
@@ -114,7 +117,7 @@ export class LoginComponent implements OnInit {
                this.errorMessage = errorResponse.error.errors[0];
                if(this.errorMessage === 'Otp already sent please check your email to login.'){
                   this.screenNumber = 2;
-               } 
+               }
               }
           this.loading = false;
         }
