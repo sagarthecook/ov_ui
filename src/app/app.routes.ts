@@ -6,6 +6,7 @@ export const routes: Routes = [
   // Lazy loading - Home component loads only when navigating to /home
 
   {path: 'userregistration', loadComponent: () => import('./userregistration/userregistration').then(m => m.UserRegistration) },
+      {path: 'voter_search', loadComponent: () => import('./voter-search/votersearch').then(m => m.VoterSearchComponent) },
   {
     path: 'home',
     loadComponent: () => import('./home/home').then(m => m.Home),
