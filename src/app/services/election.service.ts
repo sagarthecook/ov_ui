@@ -37,6 +37,10 @@ export class ElectionService {
 
      public getparty(): Observable<APIResponse<DropdownModel[]>> {
         return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_PARTY);
-        
-}
+    } 
+
+    public getElectionDetails(electionId: number): Observable<APIResponse<ElectionDetail>> {
+        return this.httpClient.get<APIResponse<ElectionDetail>>(URLConstants.BASE_URL + `/v1/election/detail/` + electionId);
+    }
+
 }

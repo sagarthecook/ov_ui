@@ -1,0 +1,154 @@
+  <div class="header" style="text-align: center; margin-bottom: 20px;">
+    <h1>Publish Election Management</h1>
+    <p style="font-size: 16px; color: green;">Manage the publishing status of elections and view candidate details.</p>
+    </div>
+<div class="publish-election-container">
+
+   <mat-card class="left-panel">
+      <mat-card-header>
+        <mat-card-title style="color : blueviolet">Elections List</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list class="elections-list">
+          <mat-list-item
+            *ngFor="let election of elections; let i = index"
+            (click)="selectElection(election.id);"
+            [class.selected]="selectedElectionIndex === i"
+          >
+            <div class="election-info">
+              <h4 mat-line>{{election.name}}</h4>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Right Side - Material Card Panel -->
+    <mat-card class="right-panel">
+      <mat-card-content>
+        <div *ngIf="selectedElection; else noSelection">
+          <mat-card-header class="details-header">
+            <mat-card-title>Election Details</mat-card-title>
+          </mat-card-header>
+
+          <div class="election-details">
+            <mat-card class="detail-section">
+              <mat-card-header>
+                <mat-card-title>{{selectedElection.electionName}}</mat-card-title>
+                <mat-card-subtitle
+                  >{{selectedElection.electionDate | date:'fullDate'}}</mat-card-subtitle
+                >
+              </mat-card-header>
+              <mat-card-content>
+                <div class="info-grid">
+                  <div class="info-item">
+                    <span class="label">Status:</span>
+                    <mat-chip
+                      [color]="getStatusColor(selectedElection.status)"
+                      class="status-chip"
+                    >
+                      {{selectedElection.status | titlecase}}
+                    </mat-chip>
+                  </div>
+                  
+                  <div class="info-item">
+                    <span class="label">Election Officer:</span>
+                    <span class="value">{{selectedElection.officer}}</span>
+                  </div>
+                  
+                  <div class="info-item">
+                    <span class="label">City:</span>
+                    <span class="value">{{selectedElection.city}}</span>
+                  </div>
+                  
+                  <div class="info-item">
+                    <span class="label">State:</span>
+                    <span class="value">{{selectedElection.state}}</span>
+                  </div>
+                  
+                  <div class="info-item">
+                    <span class="label">Country:</span>
+                    <span class="value">{{selectedElection.country}}</span>
+                  </div>
+                  
+                  <div class="info-item">
+                    <span class="label">Result Date:</span>
+                    <span class="value">{{selectedElection.resultDate | date:'mediumDate'}}</span>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- <mat-card class="detail-section" *ngIf="selectedElection.candidates && selectedElection.candidates.length > 0">
+              <mat-card-header>
+                <mat-card-title>Candidates</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-list class="candidates-list">
+                  <mat-list-item
+                    *ngFor="let candidate of selectedElection.candidates"
+                  >
+                    <mat-icon mat-list-icon>person</mat-icon>
+                    <div mat-line class="candidate-name">
+                      {{candidate.name}}
+                    </div>
+                    <div mat-line class="candidate-party">
+                      {{candidate.party}}
+                    </div>
+                    <mat-chip class="party-chip">{{candidate.party}}</mat-chip>
+                  </mat-list-item>
+                </mat-list>
+              </mat-card-content>
+            </mat-card> -->
+
+            <mat-card class="action-section">
+              <mat-card-content>
+                <div class="action-buttons">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    *ngIf="selectedElection.status?.toLowerCase() === 'draft' || selectedElection.status?.toLowerCase() === 'pending'"
+                    (click)="publishElection()"
+                  >
+                    <mat-icon>check_circle</mat-icon>
+                    Approve Election
+                  </button>
+
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    *ngIf="selectedElection.status?.toLowerCase() === 'approved'"
+                    (click)="unpublishElection()"
+                  >
+                    <mat-icon>cancel</mat-icon>
+                    Move to Draft
+                  </button>
+
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    (click)="editElection()"
+                  >
+                    <mat-icon>edit</mat-icon>
+                    Edit Election
+                  </button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+
+        <ng-template #noSelection>
+          <div class="no-selection">
+            <mat-icon class="large-icon">ballot</mat-icon>
+            <h2>No Election Selected</h2>
+            <p>
+              Please select an election from the list to view details and manage
+              publishing.
+            </p>
+          </div>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+  <!-- Left Side - Material List -->
+</div>
