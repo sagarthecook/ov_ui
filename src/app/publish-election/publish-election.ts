@@ -1,11 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, TemplateRef, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatListOption } from '@angular/material/list';
 import { ElectionService } from '../services/election.service';
 import { DropdownModel } from '../models/dropdown.model';
@@ -25,16 +29,29 @@ interface Candidate {
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule
   ],
   templateUrl: './publish-election.html',
   styleUrl: './publish-election.scss',
 })
 export class PublishElection implements OnInit {
+  @ViewChild('publishDialog') publishDialogTemplate!: TemplateRef<any>;
+  
   elections: DropdownModel[] = [];
   selectedElectionIndex: number | null = null;
   selectedElection: ElectionDetail | null = null;
-  constructor(private electionService: ElectionService) { }
+  successMessage: string = '';
+  errorMessage: string = '';
+  isPublish : boolean = false;
+  constructor(
+    private electionService: ElectionService,
+    private dialog: MatDialog
+  ) { }
+
   ngOnInit() {
     this.loadElections();
   }
@@ -58,6 +75,7 @@ export class PublishElection implements OnInit {
     this.electionService.getElectionDetails(id).subscribe(response => {
         if (response && response.data) {
           this.selectedElection = response.data;
+          this.isPublish = this.selectedElection.isPublish;
         } },
         (errorResponse) => {
           console.error('Error fetching election details:', errorResponse); 
@@ -80,31 +98,128 @@ export class PublishElection implements OnInit {
     }
   }
 
-  publishElection() {
-    if (this.selectedElection && (this.selectedElection.status?.toLowerCase() === 'draft' || this.selectedElection.status?.toLowerCase() === 'pending')) {
-      this.selectedElection.status = 'Approved';
-      console.log(`Election "${this.selectedElection.electionName}" has been approved.`);
-      // Add your publish logic here - call service to publish election
-      // You might want to show a snackbar notification here
-    }
+  onElectionPublish() {
+    if (!this.selectedElection) return;
+
+    const dialogRef = this.dialog.open(PublishElectionDialogComponent, {
+      width: '500px',
+      data: {
+        electionName: this.selectedElection.electionName
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.electionService.publishElection(this.selectedElection!.electionId, result.note).subscribe(
+          (response) => {
+            console.log('Election published successfully:', response);
+            if (this.selectedElection) {
+              this.selectedElection.status = 'Published';
+            }
+            this.successMessage = 'Election published successfully!';
+            this.errorMessage = '';
+            this.isPublish = true;
+            this.hideMessagesAfterDelay();
+          },
+          (errorResponse) => {
+            console.error('Error publishing election:', errorResponse);
+            this.errorMessage = 'Failed to publish election. Please try again.';
+            this.successMessage = '';
+            this.hideMessagesAfterDelay();
+          }
+        );
+      }
+    });
   }
 
-  unpublishElection() {
-    if (this.selectedElection && this.selectedElection.status?.toLowerCase() === 'approved') {
-      this.selectedElection.status = 'Draft';
-      console.log(`Election "${this.selectedElection.electionName}" has been moved to draft.`);
-      // Add your unpublish logic here - call service to unpublish election
-      // You might want to show a snackbar notification here
-    }
+  sendNotification() {
+    // Add notification logic here
+    this.successMessage = 'Notification sent successfully!';
+    this.errorMessage = '';
+    this.hideMessagesAfterDelay();
   }
 
-  editElection() {
-    if (this.selectedElection) {
-      console.log(`Editing election "${this.selectedElection.electionName}"`);
-      // Add navigation to edit form or open edit dialog here
-      // this.router.navigate(['/edit-election', this.selectedElection.electionId]);
-      // or
-      // this.dialog.open(EditElectionComponent, { data: this.selectedElection });
+  private hideMessagesAfterDelay() {
+    setTimeout(() => {
+      this.successMessage = '';
+      this.errorMessage = '';
+    }, 5000); // Hide after 5 seconds
+  }
+
+}
+
+// Dialog Component for Publish Election
+@Component({
+  selector: 'publish-election-dialog',
+  template: `
+    <h2 mat-dialog-title>Publish Election</h2>
+    <mat-dialog-content>
+      <p>Are you sure you want to publish <strong>{{ data.electionName }}</strong>?</p>
+      <form [formGroup]="publishForm">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Publication Note</mat-label>
+          <textarea matInput 
+                   formControlName="note" 
+                   rows="4" 
+                   placeholder="Enter note for publishing this election..."></textarea>
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="onCancel()">
+        <mat-icon>cancel</mat-icon>
+        Cancel
+      </button>
+      <button mat-raised-button 
+              color="primary" 
+              (click)="onConfirm()"
+              [disabled]="!publishForm.get('note')?.value?.trim()">
+        <mat-icon>verified</mat-icon>
+        Publish
+      </button>
+    </mat-dialog-actions>
+  `,
+  styles: [`
+    .full-width {
+      width: 100%;
+      margin: 16px 0;
+    }
+    mat-dialog-content {
+      min-width: 400px;
+    }
+  `],
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    ReactiveFormsModule,
+  ]
+})
+export class PublishElectionDialogComponent {
+  publishForm: FormGroup;
+
+  constructor(
+    public dialogRef: MatDialogRef<PublishElectionDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { electionName: string },
+    private fb: FormBuilder
+  ) {
+    this.publishForm = this.fb.group({
+      note: ['', []]
+    });
+  }
+
+  onCancel(): void {
+    this.dialogRef.close();
+  }
+
+  onConfirm(): void {
+    if (this.publishForm.get('note')?.value?.trim()) {
+      this.dialogRef.close({
+        note: this.publishForm.get('note')?.value.trim()
+      });
     }
   }
 }

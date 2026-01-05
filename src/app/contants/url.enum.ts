@@ -21,4 +21,6 @@ export enum URLConstants {
     UPDATE_CANDIDATE = '/v1/candidate/updatestatus/',
     GET_ALL_CANDIDATES_BY_STATUS = '/v1/candidate_form/findbystatus',
     VOTER_SEARCH = '/v1/voter/search',// Add query params
+    ELECTION_DETAILS = '/v1/election/detail/', // Append election ID
+    PUBLISH_ELECTION = '/v1/election/publish/' // Append election ID
 }

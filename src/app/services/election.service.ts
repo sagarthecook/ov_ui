@@ -40,7 +40,12 @@ export class ElectionService {
     } 
 
     public getElectionDetails(electionId: number): Observable<APIResponse<ElectionDetail>> {
-        return this.httpClient.get<APIResponse<ElectionDetail>>(URLConstants.BASE_URL + `/v1/election/detail/` + electionId);
+        return this.httpClient.get<APIResponse<ElectionDetail>>(URLConstants.BASE_URL + URLConstants.ELECTION_DETAILS + electionId);
+    }
+
+    public publishElection(electionId: number,note:string): Observable<APIResponse<any>> {
+        return this.httpClient.patch<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.PUBLISH_ELECTION + electionId, {  'isPublish':true,
+            'note': note});
     }
 
 }

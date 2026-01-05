@@ -1,7 +1,19 @@
-  <div class="header" style="text-align: center; margin-bottom: 20px;">
+<div class="header" style="text-align: center; margin-bottom: 20px;">
     <h1>Publish Election Management</h1>
     <p style="font-size: 16px; color: green;">Manage the publishing status of elections and view candidate details.</p>
-    </div>
+</div>
+
+<!-- Success Message -->
+<div *ngIf="successMessage" class="success-message">
+  <mat-icon>check_circle</mat-icon>
+  <span>{{ successMessage }}</span>
+</div>
+
+<!-- Error Message -->
+<div *ngIf="errorMessage" class="error-message">
+  <mat-icon>error</mat-icon>
+  <span>{{ errorMessage }}</span>
+</div>
 <div class="publish-election-container">
 
    <mat-card class="left-panel">
@@ -106,31 +118,20 @@
                 <div class="action-buttons">
                   <button
                     mat-raised-button
-                    color="primary"
-                    *ngIf="selectedElection.status?.toLowerCase() === 'draft' || selectedElection.status?.toLowerCase() === 'pending'"
-                    (click)="publishElection()"
-                  >
-                    <mat-icon>check_circle</mat-icon>
-                    Approve Election
-                  </button>
-
-                  <button
-                    mat-raised-button
                     color="warn"
-                    *ngIf="selectedElection.status?.toLowerCase() === 'approved'"
-                    (click)="unpublishElection()"
-                  >
-                    <mat-icon>cancel</mat-icon>
-                    Move to Draft
+                    (click)="sendNotification()" >
+                    <mat-icon>notifications</mat-icon>
+                    Send Notification
                   </button>
 
                   <button
                     mat-raised-button
                     color="accent"
-                    (click)="editElection()"
+                    [disabled]="isPublish"
+                    (click)="onElectionPublish()"
                   >
-                    <mat-icon>edit</mat-icon>
-                    Edit Election
+                    <mat-icon>verified</mat-icon>
+                   Publish Election
                   </button>
                 </div>
               </mat-card-content>
@@ -152,3 +153,4 @@
     </mat-card>
   <!-- Left Side - Material List -->
 </div>
+

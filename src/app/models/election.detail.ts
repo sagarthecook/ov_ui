@@ -8,4 +8,5 @@ interface ElectionDetail {
   resultDate: string;
   officer: string;
   status: string;
+  isPublish: boolean;
 }
