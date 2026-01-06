@@ -40,7 +40,7 @@ interface Candidate {
 })
 export class PublishElection implements OnInit {
   @ViewChild('publishDialog') publishDialogTemplate!: TemplateRef<any>;
-  
+
   elections: DropdownModel[] = [];
   selectedElectionIndex: number | null = null;
   selectedElection: ElectionDetail | null = null;
@@ -61,7 +61,7 @@ export class PublishElection implements OnInit {
     this.electionService.getElections().subscribe(response => {
       if (response && response.data) {
         this.elections = response.data;
-        
+
       }},
       (errorResponse) => {
         console.error('Error fetching elections:', errorResponse);
@@ -78,7 +78,7 @@ export class PublishElection implements OnInit {
           this.isPublish = this.selectedElection.isPublish;
         } },
         (errorResponse) => {
-          console.error('Error fetching election details:', errorResponse); 
+          console.error('Error fetching election details:', errorResponse);
         });
     }
 
@@ -97,7 +97,6 @@ export class PublishElection implements OnInit {
         return 'primary';
     }
   }
-
   onElectionPublish() {
     if (!this.selectedElection) return;
 
@@ -110,7 +109,7 @@ export class PublishElection implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.electionService.publishElection(this.selectedElection!.electionId, result.note).subscribe(
+        this.electionService.publishElection(this.selectedElection!.electionId, result.note).subscribe (
           (response) => {
             console.log('Election published successfully:', response);
             if (this.selectedElection) {
@@ -134,9 +133,20 @@ export class PublishElection implements OnInit {
 
   sendNotification() {
     // Add notification logic here
-    this.successMessage = 'Notification sent successfully!';
-    this.errorMessage = '';
-    this.hideMessagesAfterDelay();
+
+    this.electionService.notifyElectionPublication(this.selectedElection!.electionId, "swamini").subscribe(
+          (response) => {
+            console.log('Election published successfully:', response);
+            if (this.selectedElection) {
+              this.selectedElection.status = 'Published';
+            }
+            this.successMessage = 'Notification sent successfully!';
+            this.errorMessage = '';
+            this.isPublish = true;
+            this.hideMessagesAfterDelay();
+          },
+        );
+
   }
 
   private hideMessagesAfterDelay() {
@@ -158,9 +168,9 @@ export class PublishElection implements OnInit {
       <form [formGroup]="publishForm">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Publication Note</mat-label>
-          <textarea matInput 
-                   formControlName="note" 
-                   rows="4" 
+          <textarea matInput
+                   formControlName="note"
+                   rows="4"
                    placeholder="Enter note for publishing this election..."></textarea>
         </mat-form-field>
       </form>
@@ -170,8 +180,8 @@ export class PublishElection implements OnInit {
         <mat-icon>cancel</mat-icon>
         Cancel
       </button>
-      <button mat-raised-button 
-              color="primary" 
+      <button mat-raised-button
+              color="primary"
               (click)="onConfirm()"
               [disabled]="!publishForm.get('note')?.value?.trim()">
         <mat-icon>verified</mat-icon>
