@@ -70,7 +70,8 @@
     border-radius: 6px;
 
     &.expanded {
-      max-height: 300px;
+      max-height: 800px; // Increased to accommodate more items (about 20 items)
+      overflow-y: auto; // Add scrolling if needed for extremely long lists
     }
 
     .submenu-item {

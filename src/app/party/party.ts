@@ -95,6 +95,10 @@ export class PartyCreation implements OnInit {
           this.errorMessage =
             response.message || 'Failed to create party. Please try again.';
         }
+ // optionally auto-clear success message after 3 seconds
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
       },
       error: (error) => {
         this.loading = false;
@@ -110,11 +114,3 @@ export class PartyCreation implements OnInit {
     this.partyCreationForm.reset();
 }
 }
-
-
-
-
-
-
-
-
