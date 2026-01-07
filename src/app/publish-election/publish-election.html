@@ -119,6 +119,7 @@
                   <button
                     mat-raised-button
                     color="warn"
+                    [disabled]="!isPublish"
                     (click)="sendNotification()" >
                     <mat-icon>notifications</mat-icon>
                     Send Notification
