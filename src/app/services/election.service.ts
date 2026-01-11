@@ -48,4 +48,8 @@ export class ElectionService {
             'note': note});
     }
 
+    public sendNotification(electionId: number): Observable<APIResponse<any>> {
+        return this.httpClient.get<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.SEND_NOTIFICATION + electionId);
+    }
+
 }

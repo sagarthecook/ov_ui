@@ -38,6 +38,7 @@ interface Candidate {
   templateUrl: './publish-election.html',
   styleUrl: './publish-election.scss',
 })
+
 export class PublishElection implements OnInit {
   @ViewChild('publishDialog') publishDialogTemplate!: TemplateRef<any>;
   
@@ -47,6 +48,7 @@ export class PublishElection implements OnInit {
   successMessage: string = '';
   errorMessage: string = '';
   isPublish : boolean = false;
+  isNotificationClicked  : boolean = true;
   constructor(
     private electionService: ElectionService,
     private dialog: MatDialog
@@ -133,11 +135,28 @@ export class PublishElection implements OnInit {
   }
 
   sendNotification() {
+    this.isNotificationClicked = false;
+     setTimeout(() => {
+     this.isPublish = false;
+    }, 2000);
     // Add notification logic here
-    this.successMessage = 'Notification sent successfully!';
-    this.errorMessage = '';
-    this.hideMessagesAfterDelay();
+    if (!this.selectedElection) return;
+
+    this.electionService.sendNotification(this.selectedElection.electionId).subscribe(
+      (response) => {
+        console.log('Notification sent successfully:', response);
+        this.successMessage = 'Notification sent successfully!';
+        this.errorMessage = '';
+        this.hideMessagesAfterDelay();
+      },
+      (errorResponse) => {
+        console.error('Error sending notification:', errorResponse);  
+        this.errorMessage = 'Failed to send notification. Please try again.';
+        this.successMessage = '';
+        this.hideMessagesAfterDelay();
+      } );
   }
+  
 
   private hideMessagesAfterDelay() {
     setTimeout(() => {
