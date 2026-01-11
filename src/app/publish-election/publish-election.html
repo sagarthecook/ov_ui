@@ -112,7 +112,6 @@
                 </mat-list>
               </mat-card-content>
             </mat-card> -->
-
             <mat-card class="action-section">
               <mat-card-content>
                 <div class="action-buttons" style ="margin-left: 240px">
@@ -120,7 +119,8 @@
                     mat-raised-button
                     color="warn"
                     [disabled]="!isPublish"
-                    (click)="sendNotification()" >
+                    (click)="sendNotification()"
+                    (dblclick)="$event.preventDefault(); $event.stopPropagation()" >
                     <mat-icon>notifications</mat-icon>
                     Send Notification
                   </button>
@@ -130,6 +130,7 @@
                     color="accent"
                     [disabled]="isPublish"
                     (click)="onElectionPublish()"
+                    (dblclick)="$event.preventDefault(); $event.stopPropagation()"
                   >
                     <mat-icon>verified</mat-icon>
                    Publish Election

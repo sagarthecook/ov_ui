@@ -48,10 +48,4 @@ export class ElectionService {
             'note': note});
     }
 
-    public notifyElectionPublication(electionId: number,note:string): Observable<APIResponse<any>> {
-        return this.httpClient.patch<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.PUBLISH_ELECTION_NOTIFY + electionId, {  'isPublish':true,
-            'note': note});
-    }
-
-
 }
