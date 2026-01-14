@@ -49,11 +49,8 @@ export class UserService {
         );
     }
 
-    public saveUserDetails(userDetails: any, photo: File | null, addressId: string, roleId: string): Observable<APIResponse<any>> {
+    public saveUserDetails(userDetails: any, addressId: string, roleId: string): Observable<APIResponse<any>> {
             const formData = new FormData();
-           if (photo) {
-               formData.append('photo', photo);
-           }
            userDetails.address = {};
            userDetails.role = {};
            userDetails.role = {

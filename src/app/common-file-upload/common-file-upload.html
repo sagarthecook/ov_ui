@@ -1,0 +1,63 @@
+<mat-card>
+  <mat-card-title>File Upload</mat-card-title>
+  <mat-card-content>
+    <br>
+    <!-- Main Action Row -->
+    <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;">
+      <!-- File Selection -->
+      <button mat-raised-button color="accent" (click)="fileInput.click()">
+        <mat-icon>upload_file</mat-icon>
+        Choose Files
+      </button>
+      <input #fileInput type="file" (change)="onFileSelected($event)" multiple 
+             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.txt,.zip,.rar" 
+             style="display: none;">
+
+      <!-- Upload Button -->
+      <button mat-raised-button color="primary" (click)="uploadFiles()" 
+              [disabled]="uploading || files.length === 0">
+        <span *ngIf="!uploading">Upload to cloud</span>
+        <span *ngIf="uploading">Uploading...</span>
+      </button>
+
+      <!-- Clear Button -->
+      <button mat-stroked-button (click)="files = []" 
+              [disabled]="uploading"
+              *ngIf="files.length > 0">
+        Clear Files
+      </button>
+
+      <!-- Files Count Info -->
+      <span *ngIf="files.length > 0" style="color: #666; font-size: 14px;">
+        {{ files.length }} file(s) selected
+      </span>
+    </div>
+    
+    <!-- Upload Progress -->
+    <!-- <div *ngIf="uploading" style="margin-bottom: 16px;">
+      <p style="margin: 0 0 8px 0;">Uploading...</p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div> -->
+
+    <!-- Selected Files Display -->
+    <div style="margin-bottom: 16px;">
+      <div *ngIf="files.length > 0">
+        <h4 style="margin: 0 0 8px 0;">Selected Files:</h4>
+{{url}}
+      </div>
+      <div *ngIf="files.length === 0">
+        <p style="color: #666; font-style: italic;">No files selected</p>
+      </div>
+    </div>
+
+    <!-- Upload Instructions -->
+    <div style="margin-top: 20px; padding: 16px; background-color: #f5f5f5; border-radius: 4px;">
+      <h4>Upload Instructions:</h4>
+      <ul>
+        <li> Supports images and documents. No configuration required for testing.</li>
+        <li>Maximum file size: 1MB </li>
+        <li>Supported formats: PDF, DOC, DOCX, images</li>
+      </ul>
+    </div>
+  </mat-card-content>
+</mat-card>
