@@ -7,6 +7,7 @@ export const routes: Routes = [
 
   {path: 'userregistration', loadComponent: () => import('./userregistration/userregistration').then(m => m.UserRegistration) },
       {path: 'voter_search', loadComponent: () => import('./voter-search/votersearch').then(m => m.VoterSearchComponent) },
+      {path:'common_fileUpload', loadComponent: () => import('./common-file-upload/common-file-upload').then(m => m.CommonFileUpload) },
   {
     path: 'home',
     loadComponent: () => import('./home/home').then(m => m.Home),
