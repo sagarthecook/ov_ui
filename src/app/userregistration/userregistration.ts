@@ -246,6 +246,7 @@ export class UserRegistration implements OnInit {
   }
 
   onSubmit(): void {
+    debugger;
     this.errorMessage = '';
     this.successMessage = '';
 

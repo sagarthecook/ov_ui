@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
@@ -38,6 +38,7 @@ export class CommonFileUpload {
   uploading = false;
   url: string = '';
   
+  @Input() title : string = 'File Upload';
 
   @Output() uploadComplete = new EventEmitter<string>();
 

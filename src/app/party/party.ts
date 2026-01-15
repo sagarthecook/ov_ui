@@ -26,6 +26,7 @@ import { UserService } from '../services/user.service';
 import { APIResponse } from '../models/ApiResponse';
 import { PartyService } from '../services/party.service';
 import { Party } from '../models/party.model';
+import { CommonFileUpload } from "../common-file-upload/common-file-upload";
 
 @Component({
   selector: 'PartyCreation',
@@ -44,9 +45,10 @@ import { Party } from '../models/party.model';
     MatDatepickerModule,
     MatNativeDateModule,
     IfDirective,
-  ],
+    CommonFileUpload
+],
   templateUrl: './party.html',
-  styleUrl: './party.scss',
+  styleUrls: ['./party.scss'],
 })
 export class PartyCreation implements OnInit {
   successMessage: string;
@@ -65,9 +67,14 @@ export class PartyCreation implements OnInit {
     this.partyCreationForm = this.formBuilder.group({
       name: ['', Validators.required,],
       presidentName: ['', Validators.required ,  Validators.pattern("^[a-zA-Z]*$") ,],
-      logoText: ['', Validators.required],
+      logoUrl: ['', Validators.required],
     });
   }
+
+  handleUploadComplete(url: string) {
+    this.partyCreationForm.patchValue({ logoUrl: url });
+  }
+
   onSubmit() {
     this.successMessage = '';
     this.errorMessage = '';
@@ -79,7 +86,7 @@ export class PartyCreation implements OnInit {
     const partyData = new Party(
       formData.name,
       formData.presidentName,
-      formData.logoText
+      formData.logoUrl
     );
 
     this.partyService.saveParty(partyData).subscribe({

@@ -290,7 +290,7 @@
                   >Role is required</mat-error
                 >
           </mat-form-field>
-          <common-file-upload (uploadComplete)="handleUploadComplete($event)"></common-file-upload>
+          <common-file-upload [title]="'User Profile Picture'" (uploadComplete)="handleUploadComplete($event)"></common-file-upload>
         </div>
  </div>
 
