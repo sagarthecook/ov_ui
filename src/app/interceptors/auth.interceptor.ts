@@ -11,8 +11,16 @@ export class AuthInterceptor implements HttpInterceptor {
     const authToken = localStorage.getItem('auth_token');
     console.log('🔑 Token from localStorage:', authToken ? `Found: ${authToken.substring(0, 20)}...` : 'Not found');
 
-    // Skip token for login/public endpoints
-    const skipUrls = ['/generate_otp', '/login', '/register', '/v1/user/generate_otp', '/v1/user/validate_otp'];
+    // Skip token for login/public endpoints and external services
+    const skipUrls = [
+      '/generate_otp', 
+      '/login', 
+      '/register', 
+      '/v1/user/generate_otp', 
+      '/v1/user/validate_otp',
+      'cloudinary.com',  // Skip Cloudinary uploads
+      'dropbox.com'      // Skip Dropbox uploads
+    ];
     const shouldSkip = skipUrls.some(url => request.url.includes(url));
     
     console.log('⏭️ Should skip adding token:', shouldSkip);
@@ -21,12 +29,14 @@ export class AuthInterceptor implements HttpInterceptor {
       console.log('✅ Adding Authorization header');
       // Ensure token is properly formatted
       const token = authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`;
-      request = request.clone({
-        setHeaders: {
-          'Authorization': token,
-          'Content-Type': 'application/json'
-        }
-      });
+      
+      // Don't set Content-Type for file uploads (let browser set multipart/form-data boundary)
+      const headers: any = { 'Authorization': token };
+      if (!request.body || !(request.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+      }
+      
+      request = request.clone({ setHeaders: headers });
       console.log('📤 Request headers after clone:', request.headers.keys());
     } else {
       console.log('❌ Not adding token - reason:', !authToken ? 'No token' : 'Skipped URL');

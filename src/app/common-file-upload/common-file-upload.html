@@ -34,10 +34,13 @@
     </div>
     
     <!-- Selected Files Display -->
-    <div >
+    <div>
       <div *ngIf="files.length > 0">
         <h4 style="margin: 0 0 8px 0;">Selected Files:</h4>
-       {{url}}
+        <a *ngIf="url" [href]="url" target="_blank" 
+           style="color: #2196F3; word-break: break-all; text-decoration: underline; font-size: 14px;">
+          {{url}}
+        </a>
       </div>
       <div *ngIf="files.length === 0">
         <p style="color: #666; font-style: italic;">No files selected</p>

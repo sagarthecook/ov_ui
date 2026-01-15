@@ -31,10 +31,6 @@ export class CloudinaryUploadService {
       return throwError(() => new Error('No file selected'));
     }
 
-    if (!this.UPLOAD_PRESET || this.UPLOAD_PRESET === 'your_upload_preset') {
-      return throwError(() => new Error('Upload preset not configured. Please set your Cloudinary upload preset.'));
-    }
-
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', this.UPLOAD_PRESET);
