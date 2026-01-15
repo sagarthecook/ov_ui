@@ -16,6 +16,10 @@ export class PartyService {
     }
     public getParty(): Observable<APIResponse<DropdownModel[]>> {
             return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_PARTY);
-            
+    }
+
+    public getPartyById(partyId: number): Observable<APIResponse<any>> {
+        return this.httpClient.get<APIResponse<any>>(URLConstants.BASE_URL + 
+            URLConstants.GET_PARTY_ID + `${partyId}`);
     }
 }

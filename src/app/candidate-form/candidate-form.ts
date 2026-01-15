@@ -60,7 +60,7 @@ export class CandidateForm implements OnInit {
   countries: DropdownModel[] = [];
   states: DropdownModel[] = [];
   cities: DropdownModel[] = [];
-  
+  logUrl: string = '';
   // Address grid and save functionality
   savedAddresses: any[] = [];
   addressButtonLoading = false;
@@ -152,6 +152,22 @@ export class CandidateForm implements OnInit {
         setTimeout(() => {
           this.errorMessage = null;
         }, 3000);
+      },
+    });
+  }
+  onPartyChange(partyId: number): void {
+    // Additional logic can be added here if needed when party changes
+    this.partyService.getPartyById(partyId).subscribe({
+      next: (response: APIResponse<any>) => {
+        // Handle the response if needed
+        debugger;
+        this.logUrl = response.data.logoUrl;
+      },  
+      error: (error :any) => {
+           this.errorMessage = 'Failed to load elections.';
+           setTimeout(() => {
+             this.errorMessage = null;
+           }, 3000);
       },
     });
   }

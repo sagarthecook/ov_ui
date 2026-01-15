@@ -40,7 +40,7 @@
             <mat-label>Party</mat-label>
             <mat-select
               formControlName="party"
-              (selectionChange)="($event.value)"
+              (selectionChange)="onPartyChange($event.value)"
             >
               <mat-option *ngFor="let p of partyList" [value]="p.id">
                 {{ p.name }}
@@ -51,7 +51,15 @@
             </mat-error>
           </mat-form-field>
         </div>
-
+         Party Logo
+        <div class="form-row">
+         
+            <a *ngIf="logUrl" [href]="logUrl" target="_blank" 
+           style="color: #2196F3; word-break: break-all; text-decoration: underline; font-size: 14px;">
+          {{logUrl}}
+        </a>
+        </div>
+        
              <!-- Address Details Section -->
         <div class="form-row">
           <div style="border: 2px solid #ddd; padding: 16px; border-radius: 4px; width: 100%;">
