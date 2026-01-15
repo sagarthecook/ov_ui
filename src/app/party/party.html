@@ -28,7 +28,7 @@
                   placeholder="Enter party name"
                   [disabled]="loading"
                 />
-                <mat-icon matPrefix>person</mat-icon>
+                <mat-icon matPrefix>groups</mat-icon>
                 <mat-error
                   *ngIf="partyCreationForm.get('Name')?.hasError('required')"
                 >
@@ -51,23 +51,12 @@
                  Party President is required
                 </mat-error>
               </mat-form-field>
-
-                <mat-form-field appearance="outline" class="form-field">
-                    <mat-label>Party Logo</mat-label>
-                    <input
-                      matInput
-                      formControlName="logoText"
-                      placeholder="Enter Party Logo"
-                      [disabled]="loading"
-                    />
-                    <mat-icon matPrefix>person</mat-icon>
-                    <mat-error
-                      *ngIf="partyCreationForm.get('logoText')?.hasError('required')">
-                        Party Logo is required
-                    </mat-error>
-                      </mat-form-field>
-                    </div>
-              </form>
+            </div>
+            <div class="form-row">
+              <common-file-upload [title]="'Party Logo'"
+                (uploadComplete)="handleUploadComplete($event)"></common-file-upload>
+              </div>
+          </form>
             </mat-card-content>
 
         <!-- Card Actions -->
@@ -90,7 +79,7 @@
           >
             <mat-icon *ngIf="!loading">save</mat-icon>
             <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
-            {{ loading ? 'Registering...' : 'Register' }}
+            {{ loading ? 'Registering...' : 'Create Party' }}
           </button>
         </mat-card-actions>
         </mat-card>

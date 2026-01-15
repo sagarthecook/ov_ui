@@ -1,12 +1,60 @@
-<ngx-dropzone (change)="onSelect($event)">
-  <ngx-dropzone-label>Drop files here or click to upload</ngx-dropzone-label>
+<mat-card>
+  <mat-card-title>{{title}}</mat-card-title>
+  <mat-card-content>
+    <br>
+    <!-- Main Action Row -->
+    <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+      <!-- File Selection -->
+      <button type="button" mat-raised-button color="accent" (click)="fileInput.click()">
+        <mat-icon>upload_file</mat-icon>
+        Choose Files
+      </button>
+      <input #fileInput type="file" (change)="onFileSelected($event)" multiple 
+             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.txt,.zip,.rar" 
+             style="display: none;">
 
-  <ngx-dropzone-preview
-    *ngFor="let f of files"
-    [file]="f"
-    [removable]="true"
-    (removed)="onRemove(f)">
-    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-  </ngx-dropzone-preview>
-</ngx-dropzone>
-<button (click)="uploadFiles()">Upload Files</button>
+      <!-- Upload Button -->
+      <button type="button" mat-raised-button color="primary" (click)="uploadFiles()" 
+              [disabled]="uploading || files.length === 0">
+        <span *ngIf="!uploading">Upload to cloud</span>
+        <span *ngIf="uploading">Uploading...</span>
+      </button>
+
+      <!-- Clear Button -->
+      <button type="button" mat-stroked-button (click)="files = []" 
+              [disabled]="uploading"
+              *ngIf="files.length > 0">
+        Clear Files
+      </button>
+
+      <!-- Files Count Info -->
+      <span *ngIf="files.length > 0" style="color: #666; font-size: 14px;">
+        {{ files.length }} file(s) selected
+      </span>
+    </div>
+    
+    <!-- Selected Files Display -->
+    <div>
+      <div *ngIf="files.length > 0">
+        <h4 style="margin: 0 0 8px 0;">Selected Files:</h4>
+        <a *ngIf="url" [href]="url" target="_blank" 
+           style="color: #2196F3; word-break: break-all; text-decoration: underline; font-size: 14px;">
+          {{url}}
+        </a>
+      </div>
+      <div *ngIf="files.length === 0">
+        <p style="color: #666; font-style: italic;">No files selected</p>
+      </div>
+    </div>
+
+    <!-- Upload Instructions -->
+    <div style="margin-top: 20px; padding: 16px; background-color: #f5f5f5; border-radius: 4px;">
+      <h4>Upload Instructions:</h4>
+      <ul>
+        <li> Supports images and documents. No configuration required for testing.</li>
+        <li>Maximum file size: 1MB </li>
+        <li>Supported formats: PDF, DOC, DOCX, images</li>
+      </ul>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -25,7 +25,7 @@ import { APIResponse } from '../models/ApiResponse';
 import { DropdownModel } from '../models/dropdown.model';
 import { IfDirective } from '../shared/if.directive';
 import { Router } from '@angular/router';
-
+import { CommonFileUpload } from '../common-file-upload/common-file-upload';
 @Component({
   selector: 'userregistration',
   standalone: true,
@@ -44,6 +44,7 @@ import { Router } from '@angular/router';
     MatDatepickerModule,
     MatNativeDateModule,
     IfDirective,
+    CommonFileUpload
   ],
   templateUrl: './userregistration.html',
   styleUrls: ['./userregistration.scss'],
@@ -65,7 +66,7 @@ export class UserRegistration implements OnInit {
 
   states: DropdownModel[] = [];
   cities: DropdownModel[] = [];
-  selectedPhoto: File | null = null;
+  selectedDocs : string = '';
   // Validator: rejects values that start or end with whitespace
   private noLeadingTrailingSpaces: ValidatorFn = (
     control: AbstractControl
@@ -93,6 +94,12 @@ export class UserRegistration implements OnInit {
   savedAddresses: any[] = []; // will store display-ready address objects
   userRoles: DropdownModel[] = [];
   maxDate: Date = new Date(); //
+
+  handleUploadComplete(url: string): void {
+    debugger;
+    this.selectedDocs = url;
+    console.log('Received uploaded file URL in registration component:', url);
+  }
 
   ngOnInit(): void {
     this.registrationForm = this.formBuilder.group({
@@ -239,6 +246,7 @@ export class UserRegistration implements OnInit {
   }
 
   onSubmit(): void {
+    debugger;
     this.errorMessage = '';
     this.successMessage = '';
 
@@ -247,12 +255,14 @@ export class UserRegistration implements OnInit {
       return;
     }
 
+
     this.loading = true;
     const formData = this.registrationForm.value;
-
+    formData.docsUrl = this.selectedDocs;
+    debugger;
     // TODO: Call registration service here
     this.userService
-      .saveUserDetails(formData, this.selectedPhoto, this.addressId,this.roleId)
+      .saveUserDetails(formData, this.addressId,this.roleId)
       .subscribe(
         (response) => {
           // handle success if needed

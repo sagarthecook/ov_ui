@@ -17,10 +17,12 @@ export enum URLConstants {
     GET_ELECTION = '/v1/election/approved',
     GET_PARTY = '/v1/party',
     SAVE_PARTY = '/v1/party',
+    GET_PARTY_ID="/v1/party/",
     CREATE_CANDIDATE = '/v1/candidate_form',
     UPDATE_CANDIDATE = '/v1/candidate/updatestatus/',
     GET_ALL_CANDIDATES_BY_STATUS = '/v1/candidate_form/findbystatus',
     VOTER_SEARCH = '/v1/voter/search',// Add query params
     ELECTION_DETAILS = '/v1/election/detail/', // Append election ID
-    PUBLISH_ELECTION = '/v1/election/publish/' // Append election ID
+    PUBLISH_ELECTION = '/v1/election/publish/',  // Append election ID
+    SEND_NOTIFICATION = '/v1/election/notification/' // Notification endpoint
 }

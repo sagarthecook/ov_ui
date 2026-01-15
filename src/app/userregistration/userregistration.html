@@ -120,7 +120,7 @@
 
 
         </div>
- <div class="form-row">
+       <div class="form-row">
         <div style="border: 2px solid gray; padding: 16px;">
           <h3>Address Details</h3>
           <div
@@ -258,7 +258,7 @@
             </table>
           </div>
         </div>
-        <div style="width: 40%;">
+        <div style="width: 70%;">
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Date of Birth</mat-label>
             <input
@@ -289,7 +289,8 @@
                 <mat-error *ngIf="registrationForm.get('role')?.hasError('required')"
                   >Role is required</mat-error
                 >
-              </mat-form-field>
+          </mat-form-field>
+          <common-file-upload [title]="'User Profile Picture'" (uploadComplete)="handleUploadComplete($event)"></common-file-upload>
         </div>
  </div>
 
