@@ -295,8 +295,13 @@
             </mat-error>
           </mat-form-field>
         </div>
-
-        
+        <div class="form-row">
+          <common-file-upload [title]="'Candidate Photo'"
+            (uploadComplete)="handleUploadComplete($event)"></common-file-upload>
+  
+          <common-file-upload [title]="' Income Proof Document'"
+            (uploadComplete)="handleincomeProofUploadComplete($event)"></common-file-upload>
+        </div>
    
     </form>
     </mat-card-content>
