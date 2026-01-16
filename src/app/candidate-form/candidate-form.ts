@@ -25,6 +25,7 @@ import { PartyService } from '../services/party.service';
 import { CandidateService } from '../services/candidate.service';
 import { D } from '@angular/cdk/keycodes';
 import { CommonFileUpload } from "../common-file-upload/common-file-upload";
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -91,7 +92,8 @@ export class CandidateForm implements OnInit {
     private userService: UserService,
     private electionService: ElectionService,
     private partyService: PartyService,
-    private candidateService: CandidateService
+    private candidateService: CandidateService,
+    private router: Router
   ) {
     this.registrationForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -363,6 +365,7 @@ handleincomeProofUploadComplete(url: string) {
         this.successMessage = 'Candidate saved successfully.';
         this.registrationForm.reset();
         this.setLoading(false);
+        this.router.navigate(['/home']);
         setTimeout(() => (this.successMessage = null), 3000);
       },
       error: () => {

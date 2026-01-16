@@ -77,6 +77,15 @@
           <td mat-cell *matCellDef="let voter">{{ voter.dateOfBirth | date:'shortDate' }}</td>
         </ng-container>
 
+           <ng-container matColumnDef="profile">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Profile Photo</th>
+          <td mat-cell *matCellDef="let voter">
+            <a [href]="voter.profilePhoto" target="_blank" style="color: blue; text-decoration: underline;">
+              <mat-icon  matTooltip="Profile photo" >person</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+
         <!-- Verification Status Column -->
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>

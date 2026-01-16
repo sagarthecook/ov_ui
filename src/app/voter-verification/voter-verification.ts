@@ -26,6 +26,7 @@ export interface VoterData {
   status: 'Pending' | 'Approved' | 'Rejected';
   submissionDate: string;
   address: string;
+  profilePhoto: string;
 }
 
 @Component({
@@ -52,7 +53,7 @@ export interface VoterData {
 export class VoterVerification implements OnInit {
   displayedColumns: string[] = [
     'id', 'name', 'emailId', 'phoneNumber', 'aadharNumber', 
-    'dateOfBirth', 'status', 'submissionDate', 'actions'
+    'dateOfBirth', 'status', 'submissionDate', 'profile','actions'
   ];
   
   dataSource = new MatTableDataSource<VoterData>();
