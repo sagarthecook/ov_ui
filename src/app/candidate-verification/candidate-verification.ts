@@ -50,7 +50,8 @@ import { Inject } from '@angular/core';
   styleUrl: './candidate-verification.scss',
 })
 export class CandidateVerification implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['id', 'name', 'emailId', 'occupation', 'income', 'party', 'election', 'status', 'noteForStatus', 'actions'];
+  displayedColumns: string[] = ['id', 'name', 'emailId', 'occupation',
+     'income', 'party', 'logo', 'candidatePhoto', 'incomeProof', 'status', 'noteForStatus', 'actions'];
   dataSource = new MatTableDataSource<CandidateData>();
   loading = false;
   originalData: CandidateData[] = [];
@@ -229,6 +230,9 @@ export interface CandidateData {
   emailId: string;
   noteForStatus: string;
   dob: string;
+  candidatePhoto: string;
+  incomeProof: string;
+  logo: string;
 }
 
 // Dialog Component for Candidate Action
