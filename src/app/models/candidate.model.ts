@@ -19,6 +19,8 @@ export class Candidate {
   income: number;
   election: election;
   party: Party;
+  candidatePhoto: string;
+  incomeProof: string;
 
   constructor(
     firstName: string = '',
@@ -27,7 +29,9 @@ export class Candidate {
     occupation: string = '',
     income: number = 0,
    election: election = { id: 0 },
-    party: Party = { id: 0 }
+    party: Party = { id: 0 },
+    candidatePhoto: string = '',
+    incomeProof: string = ''
     
   ) {
     this.firstName = firstName;
@@ -37,5 +41,7 @@ export class Candidate {
     this.income = income;
     this.election = election;
     this.party = party;
+    this.candidatePhoto = candidatePhoto;
+    this.incomeProof = incomeProof;
   }
 }

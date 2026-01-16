@@ -24,6 +24,7 @@ import { ElectionService } from '../services/election.service';
 import { PartyService } from '../services/party.service';
 import { CandidateService } from '../services/candidate.service';
 import { D } from '@angular/cdk/keycodes';
+import { CommonFileUpload } from "../common-file-upload/common-file-upload";
 
 
 @Component({
@@ -42,6 +43,8 @@ import { D } from '@angular/cdk/keycodes';
     MatTableModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    CommonFileUpload
+
   ],
   templateUrl: './candidate-form.html',
   styleUrls: ['./candidate-form.scss'],
@@ -99,6 +102,8 @@ export class CandidateForm implements OnInit {
       party: ['', Validators.required],
       income: ['', Validators.required], // Change from null to empty string
       dob: ['', Validators.required],
+      candidatePhoto: ['', Validators.required],
+      incomeProof: ['', Validators.required],
       // Add address form group - make fields optional for now
       address: this.fb.group({
         countryId: [''], // Remove required for testing
@@ -321,6 +326,15 @@ export class CandidateForm implements OnInit {
     }
   }
 
+  handleUploadComplete(url: string) {
+    this.registrationForm.patchValue({ candidatePhoto: url });
+  }
+
+handleincomeProofUploadComplete(url: string) {
+    this.registrationForm.patchValue({ incomeProof: url });
+  }
+
+
   onSubmit(): void {
     this.successMessage = null;
     this.errorMessage = null;
@@ -340,6 +354,8 @@ export class CandidateForm implements OnInit {
       party: { id: formValue.party },
       wardAddress:{ id: this.addressId },
       dob: formValue.dob,
+      candidatePhoto: formValue.candidatePhoto,
+      incomeProof: formValue.incomeProof,
 
     };
     this.candidateService.saveCandidate(payload as any).subscribe({
