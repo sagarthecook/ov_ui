@@ -55,6 +55,8 @@ export class UserRegistration implements OnInit {
   successMessage = '';
   errorMessage = '';
   profileId: string | null = null;
+  selectedStateId: any;
+  selectedCityId: any;
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
@@ -98,7 +100,6 @@ export class UserRegistration implements OnInit {
   maxDate: Date = new Date(); //
 
   handleUploadComplete(url: string): void {
-    debugger;
     this.selectedDocs = url;
     console.log('Received uploaded file URL in registration component:', url);
   }
@@ -187,7 +188,6 @@ export class UserRegistration implements OnInit {
     this.loadCoutrnies();
     this.loaddUserRoles();
     if(this.profileId && this.profileId==="2"){
-      // load user details and populate form for editing
       this.loadUserDetails(this.profileId);
     }
   }
@@ -220,7 +220,33 @@ export class UserRegistration implements OnInit {
               street: userData.street,
               zipCode: userData.zipCode,
             });
+            this.selectedStateId = userData.stateId;
+            this.selectedCityId = userData.cityId;
+            
+            // Load states after user details are loaded and form is populated
+            this.userService.getStates(this.selectedStateId).subscribe(
+              (response: APIResponse<DropdownModel[]>) => {
+                if (response && response.data) {
+                  this.states = response.data;
+                }
+              },
+              (error) => {
+                this.errorMessage = 'Failed to load states.';
+              }
+            );
+            // Load cities after states are loaded
+            this.userService.getCities(this.selectedCityId).subscribe(
+              (response: APIResponse<DropdownModel[]>) => {
+                if (response && response.data) {
+                  this.cities = response.data;
+                }
+              },
+              (error) => {
+                this.errorMessage = 'Failed to load cities.';
+              }
+            );  
         }
+        this.loading = false;
       },
       (error) => {
         this.errorMessage = 'Failed to load user details.';
