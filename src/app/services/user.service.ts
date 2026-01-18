@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { APIResponse } from "../models/ApiResponse";
 import { DropdownModel } from "../models/dropdown.model";
 import { MenuItem } from "../models/menu.model";
+import { Profile } from "../models/profile.model";
 
 
 @Injectable({
@@ -84,6 +85,9 @@ export class UserService {
         return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_OFFICERS);
     }   
 
+    public getUserProfile(): Observable<APIResponse<Profile>> {
+        return this.httpClient.get<APIResponse<Profile>>(`${URLConstants.BASE_URL}/v1/user_detail/getProfile`);
+    }
    
 }
 

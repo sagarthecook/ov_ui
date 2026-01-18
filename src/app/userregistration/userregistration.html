@@ -1,7 +1,7 @@
 <div class="userregistration-container">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>User Registration</mat-card-title>
+      <mat-card-title>{{ profileId==="2" ? 'Edit User Profile' : 'Create User Profile' }}</mat-card-title>  
       <mat-card-subtitle>Create your voting account</mat-card-subtitle>
     </mat-card-header>
 
@@ -290,7 +290,7 @@
                   >Role is required</mat-error
                 >
           </mat-form-field>
-          <common-file-upload [title]="'User Profile Picture'" (uploadComplete)="handleUploadComplete($event)"></common-file-upload>
+          <common-file-upload [title]="'User Profile Picture'" [selectedFile]="selectedDocs" (uploadComplete)="handleUploadComplete($event)"></common-file-upload>
         </div>
  </div>
 

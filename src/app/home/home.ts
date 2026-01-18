@@ -59,6 +59,10 @@ export class Home implements OnInit {
     );
   }
 
+  goToProfile() {
+    this.router.navigate(['/home/profile',2]);
+  }
+
   toggleSubmenu(item: any): void {
     debugger;
     if (item.subMenus && item.subMenus.length > 0) {

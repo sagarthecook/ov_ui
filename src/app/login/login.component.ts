@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
 
 
   navigateToUsercreation(): void{
-    this.router.navigate(['/userregistration']);
+    this.router.navigate(['/profile',1]);
 
   }
   navigateTovotersearch(): void{

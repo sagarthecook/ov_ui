@@ -13,7 +13,7 @@
       <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #userMenu="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item (click)="goToProfile()">
         <mat-icon>person</mat-icon>
         <span>Profile</span>
       </button>

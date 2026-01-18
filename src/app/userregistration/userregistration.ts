@@ -24,7 +24,7 @@ import { UserService } from '../services/user.service';
 import { APIResponse } from '../models/ApiResponse';
 import { DropdownModel } from '../models/dropdown.model';
 import { IfDirective } from '../shared/if.directive';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonFileUpload } from '../common-file-upload/common-file-upload';
 @Component({
   selector: 'userregistration',
@@ -54,9 +54,11 @@ export class UserRegistration implements OnInit {
   loading = false;
   successMessage = '';
   errorMessage = '';
+  profileId: string | null = null;
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private activeRoute: ActivatedRoute,
     private router: Router
   ) {
     this.registrationForm = this.formBuilder.group({});
@@ -102,6 +104,7 @@ export class UserRegistration implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.registrationForm = this.formBuilder.group({
       firstName: [
         '',
@@ -169,6 +172,9 @@ export class UserRegistration implements OnInit {
         ],
       }),
     });
+     this.activeRoute.params.subscribe(params => {
+      this.profileId = params['id'];
+    });
     const todayDate = new Date();
     this.maxDate = new Date(
       todayDate.getFullYear() - 18,
@@ -180,8 +186,49 @@ export class UserRegistration implements OnInit {
     this.cities = [];
     this.loadCoutrnies();
     this.loaddUserRoles();
+    if(this.profileId && this.profileId==="2"){
+      // load user details and populate form for editing
+      this.loadUserDetails(this.profileId);
+    }
   }
 
+  loadUserDetails(userId: string): void {
+    this.loading = true;
+    this.userService.getUserProfile().subscribe(
+      (response: APIResponse<any>) => {
+        if (response && response.data) {  
+          debugger;
+          const userData = response.data;
+          // Populate form fields
+          this.registrationForm.patchValue({ 
+            firstName: userData.firstName,
+            middleName: userData.middleName,
+            lastName: userData.lastName,
+            emailId: userData.emailId,
+            aadharNumber: userData.aadharNumber,
+            phoneNo: userData.phoneNo,
+            dob: userData.dob ? new Date(userData.dob) : '',
+            role: userData.roleId,
+
+          });
+          this.selectedDocs = userData.docsUrl;
+          // Populate address if available
+            this.registrationForm.get('address')?.patchValue({
+              countryId: userData.countryId,
+              stateId: userData.stateId,
+              cityId: userData.cityId,
+              street: userData.street,
+              zipCode: userData.zipCode,
+            });
+        }
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load user details.';
+        this.loading = false;
+      }
+    );
+  }
+  
   loaddUserRoles(): void {
     this.userService.getUserRoles().subscribe(
       (response: APIResponse<DropdownModel[]>) => {

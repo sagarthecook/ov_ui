@@ -39,6 +39,8 @@ export class CommonFileUpload {
   url: string = '';
   
   @Input() title : string = 'File Upload';
+  
+  @Input() selectedFile: string = '';
 
   @Output() uploadComplete = new EventEmitter<string>();
 
