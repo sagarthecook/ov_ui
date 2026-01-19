@@ -317,7 +317,7 @@
       >
         <mat-icon *ngIf="!loading">save</mat-icon>
         <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
-        {{ loading ? 'Registering...' : 'Register' }}
+        {{ loading ? 'Registering...' : this.profileId == '1' ? 'Register': 'Update Profile' }}
       </button>
     </mat-card-actions>
   </mat-card>

@@ -332,9 +332,23 @@ export class UserRegistration implements OnInit {
     this.loading = true;
     const formData = this.registrationForm.value;
     formData.docsUrl = this.selectedDocs;
+    this.roleId = formData.role;
     debugger;
     // TODO: Call registration service here
-    this.userService
+    if(this.profileId && this.profileId==="2"){
+      this.userService.updateUserProfile(formData, this.addressId,this.roleId).subscribe(
+        (response) => {
+          this.successMessage = 'Profile updated successfully.';
+          this.loading = false;
+          this.router.navigate(['/login']);
+        },
+        (error) => {
+          this.errorMessage = 'Failed to update profile.';
+          this.loading = false;
+        }
+      );
+    } else {
+        this.userService
       .saveUserDetails(formData, this.addressId,this.roleId)
       .subscribe(
         (response) => {
@@ -357,6 +371,7 @@ export class UserRegistration implements OnInit {
           }
         }
       );
+    }
   }
 
   onClear(): void {

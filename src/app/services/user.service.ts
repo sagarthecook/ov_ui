@@ -66,6 +66,23 @@ export class UserService {
         return this.httpClient.post<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.USER_DETAILS_SAVE, formData);
     }
 
+    public updateUserProfile(userDetails: any, addressId: string, roleId: string): Observable<APIResponse<any>> {
+            const formData = new FormData();
+           userDetails.address = {};
+           userDetails.role = {};
+           userDetails.role = {
+             id: roleId 
+            };
+
+           userDetails.address = {
+                id: addressId
+           }
+           formData.append('user', JSON.stringify(userDetails));
+
+        return this.httpClient.put<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.USER_DETAILS_SAVE, formData);
+    }
+
+
     public getUserRoles(): Observable<APIResponse<DropdownModel[]>> {
         return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_USER_ROLES);
     }
