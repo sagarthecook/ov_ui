@@ -1,0 +1,215 @@
+<div class="voting-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading election details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage" class="error-container">
+    <div class="error-card">
+      <h3>Error</h3>
+      <p>{{ errorMessage }}</p>
+      <button class="btn btn-primary" (click)="loadVotingData()">Retry</button>
+    </div>
+  </div>
+
+  <!-- Voting Content -->
+  <div *ngIf="!isLoading && !errorMessage && votingData" class="voting-content">
+    
+    <!-- Election Header -->
+    <div class="election-header">
+      <div class="election-info">
+        <h1 class="election-title">{{ votingData.electionName }}</h1>
+        <div class="election-details">
+          <div class="detail-item">
+            <span class="label">Election ID:</span>
+            <span class="value">{{ votingData.electionId }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Voting ID:</span>
+            <span class="value">{{ votingData.votingId }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="election-timing">
+        <div class="timing-card">
+          <div class="timing-item">
+            <span class="timing-label">Start Time</span>
+            <span class="timing-value">{{ formatDateTime(votingData.electionStartTime) }}</span>
+          </div>
+          <div class="timing-item">
+            <span class="timing-label">End Time</span>
+            <span class="timing-value">{{ formatDateTime(votingData.electionEndTime) }}</span>
+          </div>
+        </div>
+        
+        <div class="election-status" [ngClass]="getElectionStatus()">
+          <span class="status-indicator"></span>
+          <span class="status-text">{{ getElectionStatusText() }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Voting Instructions -->
+    <div class="voting-instructions">
+      <h3>Voting Instructions</h3>
+      <ul>
+        <li>Select your preferred candidate by clicking on their card</li>
+        <li>Review your selection before submitting</li>
+        <li>Once submitted, your vote cannot be changed</li>
+        <li>Ensure you vote before the election end time</li>
+      </ul>
+    </div>
+
+    <!-- Candidates Section -->
+    <div class="candidates-section">
+      <h2 class="candidates-title">Select Your Candidate</h2>
+      
+      <div class="candidates-grid" *ngIf="votingData.candidates && votingData.candidates.length > 0">
+        <div 
+          *ngFor="let candidate of votingData.candidates; trackBy: trackByCandidate" 
+          class="candidate-card"
+          [class.selected]="selectedCandidateId === candidate.candidateId"
+          (click)="selectCandidate(candidate.candidateId)"
+        >
+          <div class="candidate-header">
+            <div class="candidate-photo">
+              <img 
+                *ngIf="candidate.photo" 
+                [src]="candidate.photo" 
+                [alt]="candidate.candidateName"
+                (error)="onImageError($event)"
+                class="photo-img"
+              />
+              <div *ngIf="!candidate.photo" class="photo-placeholder">
+                <i class="fas fa-user"></i>
+              </div>
+            </div>
+            
+            <div class="party-symbol">
+              <img 
+                *ngIf="isValidUrl(candidate.symbolUrl)" 
+                [src]="candidate.symbolUrl" 
+                [alt]="candidate.partyName + ' symbol'"
+                (error)="onSymbolError($event)"
+                class="symbol-img"
+              />
+              <div *ngIf="!isValidUrl(candidate.symbolUrl)" class="symbol-text">
+                {{ candidate.symbolUrl }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="candidate-info">
+            <h3 class="candidate-name">{{ candidate.candidateName }}</h3>
+            <p class="party-name">{{ candidate.partyName }}</p>
+            <div class="candidate-id">ID: {{ candidate.candidateId }}</div>
+          </div>
+          
+          <div class="selection-indicator">
+            <div class="radio-button">
+              <input 
+                type="radio" 
+                [id]="'candidate-' + candidate.candidateId"
+                name="candidateSelection"
+                [value]="candidate.candidateId"
+                [checked]="selectedCandidateId === candidate.candidateId"
+                (change)="selectCandidate(candidate.candidateId)"
+              />
+              <label [for]="'candidate-' + candidate.candidateId" class="radio-label"></label>
+            </div>
+          </div>
+          
+          <div class="vote-button-container">
+            <button 
+              class="vote-btn"
+              [class.selected]="selectedCandidateId === candidate.candidateId"
+              (click)="selectCandidate(candidate.candidateId); $event.stopPropagation()"
+            >
+              {{ selectedCandidateId === candidate.candidateId ? 'Selected' : 'Select' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Candidates Message -->
+      <div *ngIf="!votingData.candidates || votingData.candidates.length === 0" class="no-candidates">
+        <div class="empty-state">
+          <i class="fas fa-users"></i>
+          <h3>No Candidates Found</h3>
+          <p>There are no candidates registered for this election.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Selected Candidate Summary -->
+    <div *ngIf="selectedCandidateId" class="selection-summary">
+      <div class="summary-card">
+        <h3>Your Selection</h3>
+        <div class="selected-candidate-info">
+          <div class="selected-candidate-details">
+            <span class="selected-name">{{ getSelectedCandidate()?.candidateName }}</span>
+            <span class="selected-party">{{ getSelectedCandidate()?.partyName }}</span>
+          </div>
+          <button class="clear-selection" (click)="clearSelection()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Voting Actions -->
+    <div class="voting-actions">
+      <div class="action-buttons">
+        <button 
+          class="btn btn-secondary" 
+          (click)="clearSelection()"
+          [disabled]="!selectedCandidateId || isSubmitting"
+        >
+          Clear Selection
+        </button>
+        
+        <button 
+          class="btn btn-primary submit-vote" 
+          (click)="submitVote()"
+          [disabled]="!selectedCandidateId || isSubmitting || !isElectionActive()"
+        >
+          <span *ngIf="!isSubmitting">Submit Vote</span>
+          <span *ngIf="isSubmitting">
+            <i class="fas fa-spinner fa-spin"></i>
+            Submitting...
+          </span>
+        </button>
+      </div>
+      
+      <div class="voting-notice" *ngIf="!isElectionActive()">
+        <p class="notice-text">
+          <i class="fas fa-exclamation-triangle"></i>
+          {{ getElectionStatusMessage() }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Message -->
+  <div *ngIf="voteSubmitted" class="success-container">
+    <div class="success-card">
+      <div class="success-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h2>Vote Submitted Successfully!</h2>
+      <p>Thank you for participating in the election.</p>
+      <p>Your vote has been recorded securely.</p>
+      <div class="vote-details">
+        <p><strong>Election:</strong> {{ votingData?.electionName }}</p>
+        <p><strong>Selected Candidate:</strong> {{ getSelectedCandidate()?.candidateName }}</p>
+        <p><strong>Party:</strong> {{ getSelectedCandidate()?.partyName }}</p>
+      </div>
+      <button class="btn btn-primary" (click)="goToHome()">
+        Go to Home
+      </button>
+    </div>
+  </div>
+</div>

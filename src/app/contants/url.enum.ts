@@ -24,5 +24,6 @@ export enum URLConstants {
     VOTER_SEARCH = '/v1/voter/search',// Add query params
     ELECTION_DETAILS = '/v1/election/detail/', // Append election ID
     PUBLISH_ELECTION = '/v1/election/publish/',  // Append election ID
-    SEND_NOTIFICATION = '/v1/election/notification/' // Notification endpoint
+    SEND_NOTIFICATION = '/v1/election/notification/', // Notification endpoint
+    VOTING_DETAIL="/v1/voting/"
 }

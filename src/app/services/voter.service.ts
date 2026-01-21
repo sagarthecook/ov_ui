@@ -16,4 +16,10 @@ export class VoterService {
       URLConstants.BASE_URL +`${URLConstants.VOTER_SEARCH}?${searchOption}=${searchValue}`
     );
   }
+
+  public getVotingDetail(): Observable<APIResponse<VotingData>> {
+    return this.httpClient.get<APIResponse<VotingData>>(
+      URLConstants.BASE_URL + URLConstants.VOTING_DETAIL
+    );
+  }
 }
