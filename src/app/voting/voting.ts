@@ -2,6 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { VoterService } from '../services/voter.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 interface ApiResponse {
@@ -13,7 +18,14 @@ interface ApiResponse {
 
 @Component({
   selector: 'app-voting',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './voting.html',
   styleUrl: './voting.scss',
 })
@@ -64,7 +76,7 @@ export class Voting implements OnInit, OnDestroy {
         }
       },
       error: (error) => {
-        this.errorMessage = 'Failed to load voting data. Please try again later.';
+        this.errorMessage = 'you not eligible for voting or something went wrong. Please try again later.';
         this.isLoading = false;
         console.error('Voting data load error:', error);
       }
@@ -105,38 +117,27 @@ export class Voting implements OnInit, OnDestroy {
       return;
     }
 
-    this.isSubmitting = true;
+    // Navigate to dashboard after confirmation
+    this.router.navigate(['/home/dashboard']);
 
-    // Simulate API call - replace with actual service call
-    setTimeout(() => {
-      try {
-        // Simulate successful vote submission
+    this.isSubmitting = true;
         console.log('Vote submitted for candidate:', this.selectedCandidateId);
-        this.voteSubmitted = true;
         this.isSubmitting = false;
+        this.voterService.submitVote({
+          voterId: this.votingData?.votingId,
+          candidateId: this.selectedCandidateId,
+          electionId: this.votingData?.electionId
+        }).subscribe({
+          next: (response) => {
+            this.voteSubmitted = true;
+            this.isSubmitting = false;
+          },
+          error: (error) => {
+            this.errorMessage = 'Failed to submit vote. Please try again.';
+            this.isSubmitting = false;
+          }
+        });
         
-        // TODO: Replace with actual API call
-        // Example:
-        // this.votingService.submitVote({
-        //   votingId: this.votingData?.votingId,
-        //   candidateId: this.selectedCandidateId
-        // }).subscribe({
-        //   next: (response) => {
-        //     this.voteSubmitted = true;
-        //     this.isSubmitting = false;
-        //   },
-        //   error: (error) => {
-        //     this.errorMessage = 'Failed to submit vote. Please try again.';
-        //     this.isSubmitting = false;
-        //   }
-        // });
-        
-      } catch (error) {
-        this.errorMessage = 'Failed to submit vote. Please try again.';
-        this.isSubmitting = false;
-        console.error('Vote submission error:', error);
-      }
-    }, 2000);
   }
 
   /**

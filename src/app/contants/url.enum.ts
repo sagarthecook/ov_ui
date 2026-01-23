@@ -25,5 +25,6 @@ export enum URLConstants {
     ELECTION_DETAILS = '/v1/election/detail/', // Append election ID
     PUBLISH_ELECTION = '/v1/election/publish/',  // Append election ID
     SEND_NOTIFICATION = '/v1/election/notification/', // Notification endpoint
-    VOTING_DETAIL="/v1/voting/"
+    VOTING_DETAIL="/v1/voting/",
+    SUBMIT_VOTE="/v1/voting/submit_vote"
 }

@@ -22,4 +22,11 @@ export class VoterService {
       URLConstants.BASE_URL + URLConstants.VOTING_DETAIL
     );
   }
+
+  public submitVote(voteData: { voterId: number | undefined; candidateId: number | null; electionId: number | undefined }): Observable<APIResponse<null>> {
+    return this.httpClient.patch<APIResponse<null>>(
+      URLConstants.BASE_URL + URLConstants.SUBMIT_VOTE,
+      voteData
+    );
+  }
 }

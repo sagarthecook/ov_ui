@@ -1,17 +1,29 @@
 <div class="voting-container">
   <!-- Loading State -->
   <div *ngIf="isLoading" class="loading-container">
-    <div class="spinner"></div>
+    <mat-spinner diameter="50"></mat-spinner>
     <p>Loading election details...</p>
   </div>
 
   <!-- Error State -->
   <div *ngIf="errorMessage" class="error-container">
-    <div class="error-card">
-      <h3>Error</h3>
-      <p>{{ errorMessage }}</p>
-      <button class="btn btn-primary" (click)="loadVotingData()">Retry</button>
-    </div>
+    <mat-card class="error-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="error-icon">error</mat-icon>
+          Error
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="error-message">{{ errorMessage }}</p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-raised-button color="primary" (click)="loadVotingData()">
+          <mat-icon>refresh</mat-icon>
+          Retry
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
 
   <!-- Voting Content -->
@@ -193,23 +205,3 @@
     </div>
   </div>
 
-  <!-- Success Message -->
-  <div *ngIf="voteSubmitted" class="success-container">
-    <div class="success-card">
-      <div class="success-icon">
-        <i class="fas fa-check-circle"></i>
-      </div>
-      <h2>Vote Submitted Successfully!</h2>
-      <p>Thank you for participating in the election.</p>
-      <p>Your vote has been recorded securely.</p>
-      <div class="vote-details">
-        <p><strong>Election:</strong> {{ votingData?.electionName }}</p>
-        <p><strong>Selected Candidate:</strong> {{ getSelectedCandidate()?.candidateName }}</p>
-        <p><strong>Party:</strong> {{ getSelectedCandidate()?.partyName }}</p>
-      </div>
-      <button class="btn btn-primary" (click)="goToHome()">
-        Go to Home
-      </button>
-    </div>
-  </div>
-</div>
