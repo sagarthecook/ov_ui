@@ -52,4 +52,8 @@ export class ElectionService {
         return this.httpClient.get<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.SEND_NOTIFICATION + electionId);
     }
 
+    public getEligibleElection(): Observable<APIResponse<DropdownModel[]>> {
+        return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_ELIGIBLE_ELECTION);
+    }
+
 }

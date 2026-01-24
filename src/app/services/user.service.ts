@@ -53,7 +53,6 @@ export class UserService {
     public saveUserDetails(userDetails: any, addressId: string, roleId: string): Observable<APIResponse<any>> {
             const formData = new FormData();
            userDetails.address = {};
-           userDetails.role = {};
            userDetails.role = {
              id: roleId 
             };

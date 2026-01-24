@@ -1,0 +1,86 @@
+<div class="voting-history-container">
+  <div class="header" style="text-align: center; margin-bottom: 20px;">
+    <h1 style="font-size: 24px; color: green; margin: 0;">Voting History</h1>
+  </div>
+
+  <!-- Success Message -->
+  <div *ngIf="successMessage" class="success-message">
+    <mat-icon>check_circle</mat-icon>
+    <span>{{ successMessage }}</span>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    <mat-icon>error</mat-icon>
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading voting history...</p>
+  </div>
+
+  <!-- Voting History Table -->
+  <mat-card class="table-card" *ngIf="!isLoading">
+    <mat-card-header>
+      <mat-card-title>Your Voting History</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          
+          <!-- Election Name Column -->
+          <ng-container matColumnDef="electionName">
+            <th mat-header-cell *matHeaderCellDef>Election Name</th>
+            <td mat-cell *matCellDef="let element">{{element.electionName}}</td>
+          </ng-container>
+
+          <!-- Voter ID Column -->
+          <ng-container matColumnDef="voterId">
+            <th mat-header-cell *matHeaderCellDef>Voter ID</th>
+            <td mat-cell *matCellDef="let element">{{element.voterId}}</td>
+          </ng-container>
+
+          <!-- Voting Start Time Column -->
+          <ng-container matColumnDef="votingStartTime">
+            <th mat-header-cell *matHeaderCellDef>Start Time</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.votingStartTime | date:'medium'}}
+            </td>
+          </ng-container>
+
+          <!-- Voting End Time Column -->
+          <ng-container matColumnDef="votingEndTime">
+            <th mat-header-cell *matHeaderCellDef>End Time</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.votingEndTime | date:'medium'}}
+            </td>
+          </ng-container>
+
+          <!-- Voting Status Column -->
+          <ng-container matColumnDef="votingStatus">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-chip 
+                [color]="getStatusColor(element.votingStatus)"
+                class="status-chip">
+                {{getStatusText(element.votingStatus)}}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        
+        <!-- No Data Message -->
+        <div *ngIf="dataSource.data.length === 0" class="no-data">
+          <mat-icon class="large-icon">history</mat-icon>
+          <h2>No Voting History Found</h2>
+          <p>You haven't participated in any elections yet.</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

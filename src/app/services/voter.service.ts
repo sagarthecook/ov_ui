@@ -4,6 +4,7 @@ import { APIResponse } from '../models/ApiResponse';
 import { URLConstants } from '../contants/url.enum';
 import { Observable } from 'rxjs';
 import { Voter } from '../models/voter.model';
+import { VotingHistory } from '../models/voting-history.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,12 @@ export class VoterService {
     return this.httpClient.patch<APIResponse<null>>(
       URLConstants.BASE_URL + URLConstants.SUBMIT_VOTE,
       voteData
+    );
+  }
+
+  public getVotingHistory(): Observable<APIResponse<VotingHistory[]>> {
+    return this.httpClient.get<APIResponse<VotingHistory[]>>(
+      URLConstants.BASE_URL + URLConstants.VOTING_HISTORY
     );
   }
 }
