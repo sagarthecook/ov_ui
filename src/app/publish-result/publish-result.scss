@@ -1,0 +1,544 @@
+.publish-result-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  // Header Section
+  .header-section {
+    text-align: center;
+    margin-bottom: 32px;
+    
+    .page-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 2.5rem;
+      font-weight: 400;
+      color: #1976d2;
+      margin: 0 0 8px 0;
+      
+      mat-icon {
+        font-size: 2.5rem;
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+    }
+    
+    .page-subtitle {
+      font-size: 1.1rem;
+      color: #666;
+      margin: 0;
+    }
+  }
+
+  // Selection Section
+  .selection-section {
+    margin-bottom: 32px;
+    
+    .selection-card {
+      max-width: 600px;
+      margin: 0 auto;
+      
+      .election-select {
+        width: 100%;
+        margin-top: 16px;
+      }
+      
+      .loading-elections {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 16px;
+        color: #666;
+        
+        mat-spinner {
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+
+  // Loading Section
+  .loading-section {
+    text-align: center;
+    padding: 48px 24px;
+    
+    mat-spinner {
+      margin-bottom: 16px;
+    }
+    
+    p {
+      font-size: 1.1rem;
+      color: #666;
+      margin: 0;
+    }
+  }
+
+  // Results Section
+  .results-section {
+    .election-info-card {
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+      color: white;
+      
+      .election-avatar {
+        background-color: rgba(255, 255, 255, 0.2);
+        
+        mat-icon {
+          color: white;
+        }
+      }
+      
+      .election-stats {
+        display: flex;
+        gap: 24px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+        
+        .stat-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          
+          mat-icon {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            width: 1.2rem;
+            height: 1.2rem;
+          }
+          
+          .stat-label {
+            font-weight: 500;
+          }
+          
+          .stat-value {
+            font-weight: 600;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+          }
+        }
+      }
+      
+      mat-card-actions {
+        button {
+          color: white;
+          border-color: white;
+          
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+          }
+        }
+      }
+    }
+
+    // Winner Announcement
+    .winner-announcement {
+      margin-bottom: 32px;
+      
+      .winner-card {
+        background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+        color: #333;
+        box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+        
+        .winner-avatar {
+          background-color: rgba(0, 0, 0, 0.1);
+          
+          mat-icon {
+            color: #333;
+            font-size: 2rem;
+            width: 2rem;
+            height: 2rem;
+          }
+        }
+        
+        .winner-title {
+          font-weight: 600;
+          font-size: 1.5rem;
+        }
+        
+        .winner-info {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+          
+          .winner-photo {
+            flex-shrink: 0;
+            
+            .winner-photo-img {
+              width: 100px;
+              height: 100px;
+              border-radius: 50%;
+              object-fit: cover;
+              border: 4px solid rgba(0, 0, 0, 0.1);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            }
+            
+            .winner-default-avatar {
+              width: 100px;
+              height: 100px;
+              border-radius: 50%;
+              background-color: rgba(0, 0, 0, 0.1);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              
+              mat-icon {
+                font-size: 3rem;
+                width: 3rem;
+                height: 3rem;
+                color: #333;
+              }
+            }
+          }
+          
+          .winner-details {
+            text-align: left;
+            flex-grow: 1;
+            
+            .winner-name {
+              font-size: 2rem;
+              font-weight: 700;
+              margin: 16px 0 8px 0;
+              color: #333;
+            }
+            
+            .winner-party {
+              font-size: 1.2rem;
+              font-weight: 500;
+              margin: 0 0 16px 0;
+              color: #555;
+            }
+            
+            .winner-stats {
+              display: flex;
+              justify-content: center;
+              gap: 24px;
+              
+              .votes, .percentage {
+                background-color: rgba(0, 0, 0, 0.1);
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 1.1rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Candidates Grid
+    .candidates-grid {
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.8rem;
+        font-weight: 500;
+        color: #333;
+        margin: 0 0 24px 0;
+        
+        mat-icon {
+          color: #1976d2;
+        }
+      }
+      
+      .candidates-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 24px;
+      }
+    }
+  }
+
+  // Candidate Cards
+  .candidate-card {
+    position: relative;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    &.winner-card-style {
+      border: 3px solid #ffd700;
+      box-shadow: 0 8px 25px rgba(255, 193, 7, 0.2);
+    }
+    
+    .rank-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      z-index: 2;
+      
+      &.rank-1 {
+        background: linear-gradient(135deg, #ffd700, #ffb300);
+        color: #333;
+      }
+      
+      &.rank-2 {
+        background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+        color: #333;
+      }
+      
+      &.rank-3 {
+        background: linear-gradient(135deg, #cd7f32, #a0522d);
+        color: white;
+      }
+      
+      &:not(.rank-1):not(.rank-2):not(.rank-3) {
+        background: linear-gradient(135deg, #90a4ae, #607d8b);
+        color: white;
+      }
+      
+      mat-icon {
+        font-size: 1.2rem;
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+    }
+    
+    .candidate-avatar {
+      background-color: #e3f2fd;
+      overflow: hidden;
+      
+      mat-icon {
+        color: #1976d2;
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+      }
+      
+      .candidate-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+        
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+    }
+    
+    .candidate-results {
+      .vote-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        
+        .votes-count {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          
+          mat-icon {
+            color: #1976d2;
+          }
+          
+          .votes-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+          }
+          
+          .votes-label {
+            color: #666;
+            font-size: 0.9rem;
+          }
+        }
+        
+        .percentage {
+          .percentage-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1976d2;
+          }
+        }
+      }
+      
+      .progress-container {
+        .progress-bar {
+          width: 100%;
+          height: 8px;
+          background-color: #e0e0e0;
+          border-radius: 4px;
+          overflow: hidden;
+          
+          .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1976d2, #42a5f5);
+            border-radius: 4px;
+            transition: width 0.8s ease;
+            
+            &.winner-bar {
+              background: linear-gradient(90deg, #ffd700, #ffb300);
+            }
+          }
+        }
+      }
+    }
+    
+    .winner-badge {
+      background: linear-gradient(135deg, #ffd700, #ffb300);
+      color: #333;
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      margin: 0 auto;
+      width: fit-content;
+      
+      mat-icon {
+        font-size: 1.2rem;
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+    }
+  }
+
+  // No Results
+  .no-results {
+    .no-results-card {
+      max-width: 500px;
+      margin: 48px auto;
+      text-align: center;
+      
+      .no-results-content {
+        padding: 24px;
+        
+        .large-icon {
+          font-size: 4rem;
+          width: 4rem;
+          height: 4rem;
+          color: #90a4ae;
+          margin-bottom: 16px;
+        }
+        
+        h3 {
+          color: #333;
+          margin: 0 0 8px 0;
+        }
+        
+        p {
+          color: #666;
+          margin: 0 0 24px 0;
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .publish-result-container {
+    padding: 16px;
+    
+    .header-section .page-title {
+      font-size: 2rem;
+      flex-direction: column;
+      gap: 8px;
+      
+      mat-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+    
+    .results-section {
+      .election-info-card .election-stats {
+        justify-content: center;
+      }
+      
+      .winner-announcement .winner-card .winner-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+        
+        .winner-photo {
+          .winner-photo-img, .winner-default-avatar {
+            width: 80px;
+            height: 80px;
+          }
+          
+          .winner-default-avatar mat-icon {
+            font-size: 2.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+          }
+        }
+        
+        .winner-details {
+          text-align: center;
+          
+          .winner-stats {
+            flex-direction: column;
+            gap: 12px;
+          }
+        }
+      }
+      
+      .candidates-grid .candidates-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .candidate-card .candidate-results .vote-info {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+  }
+}
+
+// Dark theme support
+@media (prefers-color-scheme: dark) {
+  .publish-result-container {
+    .header-section .page-subtitle {
+      color: #aaa;
+    }
+    
+    .loading-section p {
+      color: #aaa;
+    }
+    
+    .candidates-grid .section-title {
+      color: #fff;
+    }
+    
+    .candidate-card {
+      background-color: #424242;
+      
+      .candidate-results .vote-info .votes-count .votes-number {
+        color: #fff;
+      }
+    }
+    
+    .no-results .no-results-card .no-results-content {
+      h3 {
+        color: #fff;
+      }
+      
+      p {
+        color: #aaa;
+      }
+    }
+  }
+}

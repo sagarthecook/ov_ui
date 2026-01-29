@@ -15,6 +15,7 @@ export enum URLConstants {
     GET_USER_DETAILS_BY_STATUS = '/v1/user_detail/findbyStatus',
     GET_OFFICERS = '/v1/user/getAllUsersByRole/2', // assuming role ID 2 is for officers
     GET_ELECTION = '/v1/election/approved',
+        GET_ELECTION_FOR_RESULT = '/v1/election/getElectionForResult',
     GET_PARTY = '/v1/party',
     SAVE_PARTY = '/v1/party',
     GET_PARTY_ID="/v1/party/",
@@ -28,5 +29,6 @@ export enum URLConstants {
     VOTING_DETAIL="/v1/voting/",
     SUBMIT_VOTE="/v1/voting/submit_vote",
     GET_ELIGIBLE_ELECTION = '/v1/voting/eligible_election',
-    VOTING_HISTORY="/v1/voting/voting_history"
+    VOTING_HISTORY="/v1/voting/voting_history",
+    ELECTION_RESULT_PUBLISH="/v1/election/publish_election_result"
 }

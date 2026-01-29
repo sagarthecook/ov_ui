@@ -1,0 +1,247 @@
+<div class="publish-result-container">
+  <!-- Header -->
+  <div class="header-section">
+    <h1 class="page-title">
+      <mat-icon>poll</mat-icon>
+      Election Results
+    </h1>
+    <p class="page-subtitle">
+      View and analyze election results by selecting an election
+    </p>
+  </div>
+
+  <!-- Election Selection -->
+  <div class="selection-section">
+    <mat-card class="selection-card">
+      <mat-card-header>
+        <mat-card-title>Select Election</mat-card-title>
+        <mat-card-subtitle
+          >Choose an election to view its results</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="election-select">
+          <mat-label>Select Election</mat-label>
+          <mat-select
+            [(value)]="selectedElectionId"
+            (selectionChange)="onElectionChange($event)"
+            [disabled]="loadingElections"
+          >
+            <mat-option value="">-- Select an Election --</mat-option>
+            <mat-option
+              *ngFor="let election of elections"
+              [value]="election.id"
+            >
+              {{ election.name }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>how_to_vote</mat-icon>
+        </mat-form-field>
+        @if (isResultPublished) {
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onPublishResult()"
+        >
+          <mat-icon>publish</mat-icon>
+          Publish Results
+        </button>
+
+        }
+        <div *ngIf="loadingElections" class="loading-elections">
+          <mat-spinner diameter="24"></mat-spinner>
+          <span>Loading elections...</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Loading Results -->
+  <div *ngIf="loading" class="loading-section">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading election results...</p>
+  </div>
+
+  <!-- Results Section -->
+  <div *ngIf="electionResult && !loading" class="results-section">
+    <!-- Election Info Card -->
+    <mat-card class="election-info-card">
+      <mat-card-header>
+        <div mat-card-avatar class="election-avatar">
+          <mat-icon>ballot</mat-icon>
+        </div>
+        <mat-card-title>{{ electionResult.electionName }}</mat-card-title>
+        <mat-card-subtitle>
+          Total Votes: {{ electionResult.totalVotes | number }} | Status: {{
+          electionResult.status }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="election-stats">
+          <div class="stat-item">
+            <mat-icon>people</mat-icon>
+            <span class="stat-label">Candidates:</span>
+            <span class="stat-value"
+              >{{ electionResult.candidates.length }}</span
+            >
+          </div>
+          <div class="stat-item">
+            <mat-icon>event</mat-icon>
+            <span class="stat-label">Result Date:</span>
+            <span class="stat-value"
+              >{{ electionResult.resultDate | date:'mediumDate' }}</span
+            >
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="refreshResults()">
+          <mat-icon>refresh</mat-icon>
+          Refresh Results
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Winner Announcement -->
+    <div *ngIf="getWinner()" class="winner-announcement">
+      <mat-card class="winner-card">
+        <mat-card-header>
+          <div mat-card-avatar class="winner-avatar">
+            <mat-icon>emoji_events</mat-icon>
+          </div>
+          <mat-card-title class="winner-title">Election Winner</mat-card-title>
+          <mat-card-subtitle>Congratulations to the winner!</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="winner-info">
+            <div class="winner-photo">
+              <img
+                *ngIf="getWinner()?.photo; else winnerDefaultPhoto"
+                [src]="getWinner()?.photo"
+                [alt]="getWinner()?.candidateName"
+                class="winner-photo-img"
+                loading="lazy"
+              />
+              <ng-template #winnerDefaultPhoto>
+                <div class="winner-default-avatar">
+                  <mat-icon>person</mat-icon>
+                </div>
+              </ng-template>
+            </div>
+            <div class="winner-details">
+              <h2 class="winner-name">{{ getWinner()?.candidateName }}</h2>
+              <p class="winner-party">{{ getWinner()?.partyName }}</p>
+              <div class="winner-stats">
+                <span class="votes"
+                  >{{ getWinner()?.votes | number }} votes</span
+                >
+                <span class="percentage">{{ getWinner()?.percentage }}%</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Candidates Results Grid -->
+    <div class="candidates-grid">
+      <h2 class="section-title">
+        <mat-icon>leaderboard</mat-icon>
+        Detailed Results
+      </h2>
+
+      <div class="candidates-container">
+        <mat-card
+          *ngFor="let candidate of getSortedCandidates(); let i = index"
+          class="candidate-card"
+          [class.winner-card-style]="candidate.isWinner"
+        >
+          <!-- Rank Badge -->
+          <div class="rank-badge" [class]="'rank-' + (i + 1)">
+            <span>{{ i + 1 }}</span>
+            <mat-icon *ngIf="i === 0">emoji_events</mat-icon>
+          </div>
+
+          <mat-card-header>
+            <div mat-card-avatar class="candidate-avatar">
+              <img
+                *ngIf="candidate.photo; else defaultAvatar"
+                [src]="candidate.photo"
+                [alt]="candidate.candidateName"
+                class="candidate-photo"
+                (error)="onImageError($event, candidate)"
+                loading="lazy"
+              />
+              <ng-template #defaultAvatar>
+                <mat-icon>person</mat-icon>
+              </ng-template>
+            </div>
+            <mat-card-title>{{ candidate.candidateName }}</mat-card-title>
+            <mat-card-subtitle>{{ candidate.partyName }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="candidate-results">
+              <div class="vote-info">
+                <div class="votes-count">
+                  <mat-icon>how_to_vote</mat-icon>
+                  <span class="votes-number"
+                    >{{ candidate.votes | number }}</span
+                  >
+                  <span class="votes-label">votes</span>
+                </div>
+
+                <div class="percentage">
+                  <span class="percentage-value"
+                    >{{ candidate.percentage }}%</span
+                  >
+                </div>
+              </div>
+
+              <!-- Vote Percentage Bar -->
+              <div class="progress-container">
+                <div class="progress-bar">
+                  <div
+                    class="progress-fill"
+                    [style.width.%]="candidate.percentage"
+                    [class.winner-bar]="candidate.isWinner"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions *ngIf="candidate.isWinner">
+            <span class="winner-badge">
+              <mat-icon>emoji_events</mat-icon>
+              Winner
+            </span>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results Message -->
+  <div
+    *ngIf="!electionResult && !loading && selectedElectionId"
+    class="no-results"
+  >
+    <mat-card class="no-results-card">
+      <mat-card-content>
+        <div class="no-results-content">
+          <mat-icon class="large-icon">info</mat-icon>
+          <h3>No Results Available</h3>
+          <p>
+            Results for this election are not yet available or have not been
+            published.
+          </p>
+          <button mat-raised-button color="accent" (click)="refreshResults()">
+            <mat-icon>refresh</mat-icon>
+            Try Again
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
