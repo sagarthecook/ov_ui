@@ -5,7 +5,7 @@ import { APIResponse } from "../models/ApiResponse";
 import { URLConstants } from "../contants/url.enum";
 import { Observable } from "rxjs";
 import { DropdownModel } from "../models/dropdown.model";
-
+import { DataPoint } from "../models/datapoint.model";
 @Injectable({
     providedIn: 'root'
 })
@@ -65,4 +65,12 @@ export class ElectionService {
         return this.httpClient.post<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.ELECTION_RESULT_PUBLISH, { electionId });
     }
 
+    public getElectionsForShowResult(): Observable<APIResponse<DropdownModel[]>> {
+        return this.httpClient.get<APIResponse<DropdownModel[]>>(URLConstants.BASE_URL + URLConstants.GET_ELECTION_FOR_SHOW_RESULT);
+    }
+
+    
+    public getElectionDataPoint(): Observable<APIResponse<DataPoint>> {
+        return this.httpClient.get<APIResponse<DataPoint>>(URLConstants.BASE_URL + URLConstants.GET_ELECTION_FOR_DATAPOINT);
+    }
 }

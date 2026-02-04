@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { ElectionService } from '../services/election.service';
+import { DropdownModel } from '../models/dropdown.model';
+import { DataPoint } from '../models/datapoint.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,51 +24,85 @@ import { MatIconModule } from '@angular/material/icon';
         <mat-card class="info-card">
           <mat-card-header>
             <div mat-card-avatar>
-              <mat-icon>how_to_vote</mat-icon>
+              <mat-icon>ballot</mat-icon>
             </div>
-            <mat-card-title>Total Votes</mat-card-title>
-            <mat-card-subtitle>Current election statistics</mat-card-subtitle>
+            <mat-card-title>Total Elections</mat-card-title>
+            <mat-card-subtitle>All elections in the system</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <h2>1,234</h2>
-            <p>Votes cast today</p>
+            <h2>{{ dataPoint?.totalElections || 0 }}</h2>
+            <p>Elections created</p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button>VIEW DETAILS</button>
+            <button mat-button>VIEW ALL</button>
           </mat-card-actions>
         </mat-card>
 
-        <mat-card class="info-card">
+        <mat-card class="info-card approved">
           <mat-card-header>
             <div mat-card-avatar>
-              <mat-icon>people</mat-icon>
+              <mat-icon>check_circle</mat-icon>
             </div>
-            <mat-card-title>Registered Voters</mat-card-title>
-            <mat-card-subtitle>Total registered users</mat-card-subtitle>
+            <mat-card-title>Approved Elections</mat-card-title>
+            <mat-card-subtitle>Elections approved for voting</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <h2>5,678</h2>
-            <p>Eligible voters</p>
+            <h2>{{ dataPoint?.totalElectionApproved || 0 }}</h2>
+            <p>Ready for voting</p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button>MANAGE VOTERS</button>
+            <button mat-button>VIEW APPROVED</button>
           </mat-card-actions>
         </mat-card>
 
-        <mat-card class="info-card">
+        <mat-card class="info-card unapproved">
           <mat-card-header>
             <div mat-card-avatar>
-              <mat-icon>timeline</mat-icon>
+              <mat-icon>pending</mat-icon>
             </div>
-            <mat-card-title>Election Status</mat-card-title>
-            <mat-card-subtitle>Current election state</mat-card-subtitle>
+            <mat-card-title>Unapproved Elections</mat-card-title>
+            <mat-card-subtitle>Pending approval</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <h2>Active</h2>
-            <p>Election in progress</p>
+            <h2>{{ dataPoint?.totalElectionunApproved || 0 }}</h2>
+            <p>Awaiting review</p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button>MONITOR</button>
+            <button mat-button>REVIEW</button>
+          </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="info-card published">
+          <mat-card-header>
+            <div mat-card-avatar>
+              <mat-icon>publish</mat-icon>
+            </div>
+            <mat-card-title>Results Published</mat-card-title>
+            <mat-card-subtitle>Elections with published results</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <h2>{{ dataPoint?.totalElectionResultPublished || 0 }}</h2>
+            <p>Results available</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button>VIEW RESULTS</button>
+          </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="info-card unpublished">
+          <mat-card-header>
+            <div mat-card-avatar>
+              <mat-icon>unpublished</mat-icon>
+            </div>
+            <mat-card-title>Results Unpublished</mat-card-title>
+            <mat-card-subtitle>Completed but not published</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <h2>{{ dataPoint?.totalElectionResultUnPublished || 0 }}</h2>
+            <p>Pending publication</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button>PUBLISH</button>
           </mat-card-actions>
         </mat-card>
       </div>
@@ -113,6 +150,22 @@ import { MatIconModule } from '@angular/material/icon';
       margin: 10px 0;
     }
 
+    .info-card.approved h2 {
+      color: #4caf50;
+    }
+
+    .info-card.unapproved h2 {
+      color: #ff9800;
+    }
+
+    .info-card.published h2 {
+      color: #2196f3;
+    }
+
+    .info-card.unpublished h2 {
+      color: #f44336;
+    }
+
     .recent-activity {
       margin-top: 30px;
     }
@@ -137,6 +190,32 @@ import { MatIconModule } from '@angular/material/icon';
     }
   `]
 })
-export class DashboardComponent {
-  constructor() {}
+export class DashboardComponent implements OnInit {
+    elections: DropdownModel[] = [];
+    dataPoint: DataPoint | null = null;
+  constructor(private electionService: ElectionService) {}
+
+  ngOnInit(): void {
+
+     this.electionService.getElectionsForShowResult().subscribe(
+      (response) => {
+        if (response.success) {
+          this.elections = response.data || [];
+        }
+     },
+      (error) => {
+        console.error('Error fetching elections for show result:', error);
+      });
+
+      this.electionService.getElectionDataPoint().subscribe(
+      (response) => {
+        if (response.success) {
+           this.dataPoint = response.data;
+        }
+     },
+      (error) => {
+        console.error('Error fetching election data point:', error);
+      });
+  }
+
 }
