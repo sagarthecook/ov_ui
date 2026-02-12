@@ -73,4 +73,8 @@ export class ElectionService {
     public getElectionDataPoint(): Observable<APIResponse<DataPoint>> {
         return this.httpClient.get<APIResponse<DataPoint>>(URLConstants.BASE_URL + URLConstants.GET_ELECTION_FOR_DATAPOINT);
     }
+
+       public getResult(electionId: number): Observable<APIResponse<any>> {
+        return this.httpClient.get<APIResponse<any>>(URLConstants.BASE_URL + URLConstants.ELECTION_RESULT + `/${electionId}`);
+    }
 }

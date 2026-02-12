@@ -25,6 +25,7 @@ export const routes: Routes = [
       {path: 'election_info', loadComponent: () => import('./election-info/election-info').then(m => m.ElectionInfo) },
       {path: 'voting_history', loadComponent: () => import('./voting-history/voting-history').then(m => m.VotingHistory) },
       {path: 'publish_result', loadComponent: () => import('./publish-result/publish-result').then(m => m.PublishResult) },
+      {path: 'show_result', loadComponent: () => import('./result/result').then(m => m.Result) },
     ]
   },
   {path: '**', redirectTo: ''}  // Wildcard route to catch undefined paths and redirect to login

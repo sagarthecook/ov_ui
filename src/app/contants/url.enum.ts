@@ -32,5 +32,6 @@ export enum URLConstants {
     VOTING_HISTORY="/v1/voting/voting_history",
     ELECTION_RESULT_PUBLISH="/v1/election/publish_election_result",
     GET_ELECTION_FOR_SHOW_RESULT="/v1/election/getElectionsForShowResult",
-    GET_ELECTION_FOR_DATAPOINT="/v1/election/datapoint"
+    GET_ELECTION_FOR_DATAPOINT="/v1/election/datapoint",
+     ELECTION_RESULT="/v1/election/getResult",
 }

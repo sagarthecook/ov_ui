@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ElectionService } from '../services/election.service';
 import { DropdownModel } from '../models/dropdown.model';
 import { DataPoint } from '../models/datapoint.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -85,7 +86,7 @@ import { DataPoint } from '../models/datapoint.model';
             <p>Results available</p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button>VIEW RESULTS</button>
+            <button mat-button (click)="onViewResultClick()">VIEW RESULTS</button>
           </mat-card-actions>
         </mat-card>
 
@@ -193,7 +194,7 @@ import { DataPoint } from '../models/datapoint.model';
 export class DashboardComponent implements OnInit {
     elections: DropdownModel[] = [];
     dataPoint: DataPoint | null = null;
-  constructor(private electionService: ElectionService) {}
+  constructor(private electionService: ElectionService, private router: Router) {}
 
   ngOnInit(): void {
 
@@ -216,6 +217,12 @@ export class DashboardComponent implements OnInit {
       (error) => {
         console.error('Error fetching election data point:', error);
       });
+  }
+
+  onViewResultClick(): void {
+    // Implement navigation to results page or display results in a dialog
+    console.log('View Results clicked');
+    this.router.navigate(['/home/show_result']);
   }
 
 }
