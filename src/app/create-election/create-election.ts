@@ -214,8 +214,13 @@ export class CreateElection implements OnInit {
         this.successMessage = 'Election created successfully!';
         this.electionCreationForm.reset();
       },
-      (error:any) => {
+      (errorResponse:any) => {
         this.loading = false;
+        debugger;
+        if (errorResponse && errorResponse.error.errors && errorResponse.error.errors.length > 0) {
+          this.errorMessage = errorResponse.error.errors[0];
+          return;
+        }
         this.errorMessage = 'Failed to create election. Please try again.';
       }
     );

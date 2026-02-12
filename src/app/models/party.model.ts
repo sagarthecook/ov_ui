@@ -1,15 +1,15 @@
 export class Party {
     name: string;
     presidentName: string;
-    logoText: string;
+    logoUrl: string;
 
     constructor(
         name: string = '',
         presidentName: string = '',
-        logoText: string = ''
+        logoUrl: string = ''
     ) {
         this.name = name;
         this.presidentName = presidentName;
-        this.logoText = logoText;
+        this.logoUrl = logoUrl;
     }
 }
