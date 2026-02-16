@@ -38,6 +38,10 @@ export class UserService {
         return this.httpClient.get<APIResponse<any[]>>(URLConstants.BASE_URL + URLConstants.GET_VOTER_DETAILS_LIST);
     }
 
+ public getManagementUserDetailsList(): Observable<APIResponse<any[]>> {
+        return this.httpClient.get<APIResponse<any[]>>(URLConstants.BASE_URL + URLConstants.GET_MANAGEMENT_USER_DETAILS_LIST);
+    }
+
     public getUserDetailsByStatus(status: string = 'Pending', orderBy: string = 'created_date', order: string = 'desc'): Observable<APIResponse<any[]>> {
         const params = {
             status: status,

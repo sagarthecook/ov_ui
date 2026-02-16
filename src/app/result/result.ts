@@ -32,10 +32,11 @@ interface ElectionResult {
   candidates: CandidateResult[];
   status: string;
   resultDate?: string;
+  electionDate?: string;
 }
 
 @Component({
-  selector: 'app-result',
+  selector: 'result',
   imports: [    CommonModule,
     MatSelectModule,
     MatFormFieldModule,
@@ -99,8 +100,8 @@ elections: DropdownModel[] = [];
       next: (response: any) => {
         if (response.success) {
           // Simulate election results
-          const electionData = response.data;
-          this.electionResult = this.generateResults(electionData, electionId, electionData.electionName);
+          const electionData = response.data.electionResults;
+          this.electionResult = this.generateResults(electionData, electionId, response.data.electionName,response.data.electionResultDate,response.data.electionDate);
         } else {
           this.showError('Failed to load election results');
         }
@@ -114,7 +115,7 @@ elections: DropdownModel[] = [];
     });
   }
 
-  private generateResults(electionResult: any, electionId: number, electionName: string): ElectionResult {
+  private generateResults(electionResult: any, electionId: number, electionName: string, electionResultDate:string,electionDate:string): ElectionResult {
     // Process the candidate data and add photo URLs if not present
     const candidates: CandidateResult[] = electionResult.map((candidate: any) => ({
       candidateId: candidate.candidateId || candidate.id,
@@ -136,7 +137,8 @@ elections: DropdownModel[] = [];
       totalVotes: totalVotes,
       candidates: candidates,
       status: 'Published',
-      resultDate: new Date().toISOString()
+      resultDate: electionResultDate,
+      electionDate: electionDate
     };
   }
 
