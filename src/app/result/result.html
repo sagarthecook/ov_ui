@@ -107,7 +107,8 @@
               />
               <ng-template #winnerDefaultPhoto>
                 <div class="winner-default-avatar">
-                  <mat-icon>person</mat-icon>
+                  <!-- <mat-icon>person</mat-icon> -->
+                   <img [src]="getWinner()?.photo" alt="Default Avatar" class="winner-photo-img" />
                 </div>
               </ng-template>
             </div>

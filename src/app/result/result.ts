@@ -123,7 +123,7 @@ elections: DropdownModel[] = [];
       firstName: candidate.firstName,
       lastName: candidate.lastName,
       partyName: candidate.partyName || candidate.party?.name,
-      photo: candidate.photo || candidate.candidatePhoto || this.getDefaultCandidatePhoto(candidate.candidateId),
+      photo: candidate.candidateImageUrl,
       votes: candidate.votes || 0,
       percentage: candidate.percentage || 0,
       isWinner: candidate.isWinner || false
@@ -157,6 +157,7 @@ elections: DropdownModel[] = [];
 
   getWinner(): CandidateResult | null {
     if (!this.electionResult) return null;
+    debugger;
     return this.electionResult.candidates.find(c => c.isWinner) || 
            this.electionResult.candidates.sort((a, b) => b.votes - a.votes)[0];
   }
