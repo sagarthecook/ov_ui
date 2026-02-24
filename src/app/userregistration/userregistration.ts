@@ -71,6 +71,7 @@ export class UserRegistration implements OnInit {
   states: DropdownModel[] = [];
   cities: DropdownModel[] = [];
   selectedDocs : string = '';
+    aadharCardDocs : string = '';
   // Validator: rejects values that start or end with whitespace
   private noLeadingTrailingSpaces: ValidatorFn = (
     control: AbstractControl
@@ -102,6 +103,11 @@ export class UserRegistration implements OnInit {
   handleUploadComplete(url: string): void {
     this.selectedDocs = url;
     console.log('Received uploaded file URL in registration component:', url);
+  }
+
+  handleUploadAadharComplete(url: string): void {
+    this.aadharCardDocs = url;
+    console.log('Received uploaded Aadhar file URL in registration component:', url);
   }
 
   ngOnInit(): void {
@@ -212,6 +218,7 @@ export class UserRegistration implements OnInit {
 
           });
           this.selectedDocs = userData.docsUrl;
+            this.aadharCardDocs = userData.aadharDocsUrl;
           // Populate address if available
             this.registrationForm.get('address')?.patchValue({
               countryId: userData.countryId,
@@ -332,6 +339,7 @@ export class UserRegistration implements OnInit {
     this.loading = true;
     const formData = this.registrationForm.value;
     formData.docsUrl = this.selectedDocs;
+    formData.aadharDocsUrl = this.aadharCardDocs;
     this.roleId = formData.role;
     debugger;
     // TODO: Call registration service here

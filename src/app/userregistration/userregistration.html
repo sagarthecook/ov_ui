@@ -290,7 +290,15 @@
                   >Role is required</mat-error
                 >
           </mat-form-field>
-          <common-file-upload [title]="'User Profile Picture'" [selectedFile]="selectedDocs" (uploadComplete)="handleUploadComplete($event)"></common-file-upload>
+          <div style="display: flex; flex-direction: row; gap: 16px; width: 100%;">
+  <div style="flex: 1;">
+    <common-file-upload [title]="'User Profile Picture'" [selectedFile]="selectedDocs" (uploadComplete)="handleUploadComplete($event)"></common-file-upload>
+  </div>
+  <div style="flex: 1;">
+    <common-file-upload [title]="'Aadhar Card'" [selectedFile]="aadharCardDocs" (uploadComplete)="handleUploadAadharComplete($event)"></common-file-upload>
+  </div>
+</div>
+        
         </div>
  </div>
 
